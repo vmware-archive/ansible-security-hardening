@@ -1,0 +1,8 @@
+---
+# this playbook enforces cis rules in a chroot
+
+- hosts: chroots
+  connection: chroot
+
+  roles:
+    - role: cis

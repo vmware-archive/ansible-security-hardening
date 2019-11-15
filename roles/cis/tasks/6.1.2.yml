@@ -1,0 +1,37 @@
+---
+- name: "6.1.2 Ensure permissions on /etc/passwd are configured (Scored)"
+  file:
+      dest: /etc/passwd
+      owner: root
+      group: root
+      mode: 0644
+  when: not ansible_check_mode
+  tags:
+      - cis
+      - scored
+      - 6
+      - 6.1
+      - 6.1.2
+
+- name: "6.1.2 Verify permissions on /etc/passwd are configured (Scored)"
+  block:
+    - name: "6.1.2 verify permissions"
+      stat:
+        path: /etc/passwd
+      register: etcpass
+    - fail:
+        msg: "6.1.2 failed to verify uid. expected: 0. found: {{ etcpass.stat.uid }}"
+      when: etcpass.stat.uid != 0
+    - fail:
+        msg: "6.1.2 failed to verify gid. expected: 0. found: {{ etcpass.stat.gid }}"
+      when: etcpass.stat.gid != 0
+    - fail:
+        msg: "6.1.2 failed to verify. expected permissions: 0644. found permissions: {{ etcpass.stat.mode }}"
+      when: etcpass.stat.mode != "0644"
+  when: ansible_check_mode
+  tags:
+      - cis
+      - scored
+      - 6
+      - 6.1
+      - 6.1.2
