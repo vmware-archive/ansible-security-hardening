@@ -1,0 +1,7 @@
+---
+- include_tasks: "{{ include_task_rule }}"
+  loop:
+    - 1.7.1.6.yml
+  tags:
+    - cis
+    - cis.1

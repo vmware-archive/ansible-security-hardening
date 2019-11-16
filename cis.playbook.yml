@@ -1,0 +1,11 @@
+---
+# remediation and validation of cis hardening rules
+# use -e verify=true to verify
+
+- hosts: chroots
+
+  roles:
+    - role: cis
+  vars:
+    - verify: false
+    - include_task_rule : "{{ \"verify/{{ item }}\" if verify|bool else \"{{ item }}\" }}"

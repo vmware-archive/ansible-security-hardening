@@ -1,0 +1,12 @@
+---
+- name: "6.1.2 Ensure permissions on /etc/passwd are configured (Scored)"
+  file:
+      dest: /etc/passwd
+      owner: root
+      group: root
+      mode: 0644
+  when: not verify|bool
+  tags:
+      - scored
+      - cis.6.1
+      - cis.6.1.2
