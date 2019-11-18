@@ -18,7 +18,27 @@ Validation is done by setting `-e verify=true` in command line. verification doe
 
 ### Build & Run
 
-1. To do a chroot based run, do the following (assuming PhotonOS)
+1. Use a docker based run
+
+There is a docker build script in examples/Dockerfile. You can use it to quickly get
+the project up and running and check it out.
+
+```
+cd examples
+docker build . -t ansible-security-hardening
+```
+
+We discuss commands and options below. All of them can be run using the docker image as follows.
+Eg: to skip `notscored` tasks
+```
+docker run --rm  -v/root/ansible-security-hardening:/src \
+ansible-security-hardening:latest \
+ansible-playbook  -i /src/examples/chroots /src/cis.playbook.yml --tags "cis" --skip-tags "notscored"
+```
+
+See below for further command examples.
+
+2. To do a chroot based run, do the following (assuming PhotonOS)
 
 create a chroot with necessary packages installed
 
@@ -36,7 +56,7 @@ photon-release \
 -y
 ```
 
-2. Run the cis rule 6.1.2
+3. Run the cis rule 6.1.2
 ```
 ansible-playbook  -i examples/chroots cis.playbook.yml --tags "cis.6,cis.6.1.2"
 
@@ -55,7 +75,7 @@ PLAY RECAP *********************************************************************
 /root/testroot             : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
 
-3. Verify the cis rule 6.1.2
+4. Verify the cis rule 6.1.2
 ```
 ansible-playbook -i 'examples/chroots' cis.playbook.yml --tags "cis.6,cis.6.1.2" -e verify=true
 
@@ -83,7 +103,7 @@ PLAY RECAP *********************************************************************
 /root/testroot             : ok=3    changed=0    unreachable=0    failed=0    skipped=3    rescued=0    ignored=0
 ```
 
-4. Force a failure and verify (notice the test style error and the return code)
+5. Force a failure and verify (notice the test style error and the return code)
 ```
 chmod 0777 /root/testroot/etc/passwd
 ansible-playbook -i 'examples/chroots' cis.playbook.yml \
@@ -108,7 +128,8 @@ TASK [cis : fail] **************************************************************
 skipping: [/root/testroot]
 
 TASK [cis : fail] ***************************************************************************************************
-fatal: [/root/testroot]: FAILED! => {"changed": false, "msg": "6.1.2 failed to verify permissions. expected: 0644. found: 0777"}
+fatal: [/root/testroot]:
+FAILED! => {"changed": false, "msg": "6.1.2 failed to verify permissions. expected: 0644. found: 0777"}
 
 PLAY RECAP **********************************************************************************************************
 /root/testroot             : ok=3    changed=0    unreachable=0    failed=1    skipped=2    rescued=0    ignored=0
@@ -131,10 +152,12 @@ roles/cis/tasks/6/6.1.2.yml
 ```
 
 Make sure the tasks/main.yml includes the right file. In this case, the 6/tasks.yml
+Note: In order to separate scored and notscored tasks,
+use separate files like 1/tasksnotscored.yml
 ```
 root [ /ansible-hardening-scripts ]# cat roles/cis/tasks/main.yml
 ---
-- import_tasks: 1/tasks.yml
+- import_tasks: 1/tasksnotscored.yml
 - import_tasks: 6/tasks.yml
 ```
 

@@ -6,7 +6,9 @@
       group: root
       mode: 0666
   tags:
-      - notscored
+      - cis
+      - cis.1
       - cis.1.7
       - cis.1.7.1
       - cis.1.7.1.6
+      - notscored
