@@ -1,0 +1,3 @@
+---
+- import_tasks: 1/tasks.yml
+- import_tasks: 6/tasks.yml

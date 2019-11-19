@@ -1,0 +1,2 @@
+[chroots]
+/root/testroot ansible_connection=chroot
