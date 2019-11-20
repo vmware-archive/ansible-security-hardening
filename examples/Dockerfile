@@ -3,7 +3,7 @@ FROM photon:3.0
 RUN tdnf erase toybox -qy --refresh
 RUN tdnf install rpm ansible python-xml -qy --refresh
 
-#setup chroot as ansible targer
+#setup chroot as ansible target
 RUN mkdir -p /root/testroot
 RUN rpm --root /root/testroot --initdb
 
