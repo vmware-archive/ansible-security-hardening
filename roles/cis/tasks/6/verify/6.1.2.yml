@@ -15,6 +15,8 @@
         msg: "6.1.2 failed to verify permissions. expected: 0644. found: {{ etcpass.stat.mode }}"
       when: etcpass.stat.mode != "0644"
   tags:
-    - scored
+    - cis
+    - cis.6
     - cis.6.1
     - cis.6.1.2
+    - scored
