@@ -15,7 +15,9 @@
         msg: "6.1.3 failed to verify permissions. expected: 0000. found: {{ etcshadow.stat.mode }}"
       when: etcshadow.stat.mode != "0000"
   tags:
-    - scored
+    - cis
+    - cis.6
     - cis.6.1
     - cis.6.1.3
+    - scored
 
