@@ -15,7 +15,9 @@
         msg: "1.7.1.6 failed to verify permissions. expected: 0666. found: {{ issue.stat.mode }}"
       when: issue.stat.mode != "0666"
   tags:
-    - notscored
+    - cis
+    - cis.1
     - cis.1.7
     - cis.1.7.1
     - cis.1.7.1.6
+    - notscored
