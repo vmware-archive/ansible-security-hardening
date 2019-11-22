@@ -24,7 +24,6 @@ There is a docker build script in examples/Dockerfile. You can use it to quickly
 the project up and running and check it out.
 
 ```
-cd examples
 docker build examples/ -t ansible-security-hardening
 ```
 
