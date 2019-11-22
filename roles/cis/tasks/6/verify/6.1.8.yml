@@ -4,16 +4,16 @@
     - name: "6.1.8 verify permissions"
       stat:
         path: /etc/group-
-      register: etcgroup-
+      register: etcgroup
     - fail:
-        msg: "6.1.8 failed to verify uid. expected: 0. found: {{ etcgroup-.stat.uid }}"
-      when: etcgroup-.stat.uid != 0
+        msg: "6.1.8 failed to verify uid. expected: 0. found: {{ etcgroup.stat.uid }}"
+      when: etcgroup.stat.uid != 0
     - fail:
-        msg: "6.1.8 failed to verify gid. expected: 0. found: {{ etcgroup-.stat.gid }}"
-      when: etcgroup-.stat.gid != 0
+        msg: "6.1.8 failed to verify gid. expected: 0. found: {{ etcgroup.stat.gid }}"
+      when: etcgroup.stat.gid != 0
     - fail:
-        msg: "6.1.8 failed to verify permissions. expected: 0600. found: {{ etcgroup-.stat.mode }}"
-      when: etcgroup-.stat.mode != "0600"
+        msg: "6.1.8 failed to verify permissions. expected: 0600. found: {{ etcgroup.stat.mode }}"
+      when: etcgroup.stat.mode != "0600"
   tags:
     - cis
     - cis.6

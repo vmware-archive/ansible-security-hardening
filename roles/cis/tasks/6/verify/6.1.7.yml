@@ -4,16 +4,16 @@
     - name: "6.1.7 verify permissions"
       stat:
         path: /etc/shadow-
-      register: etcshadow-
+      register: etcshadow
     - fail:
-        msg: "6.1.7 failed to verify uid. expected: 0. found: {{ etcshadow-.stat.uid }}"
-      when: etcshadow-.stat.uid != 0
+        msg: "6.1.7 failed to verify uid. expected: 0. found: {{ etcshadow.stat.uid }}"
+      when: etcshadow.stat.uid != 0
     - fail:
-        msg: "6.1.7 failed to verify gid. expected: 0. found: {{ etcshadow-.stat.gid }}"
-      when: etcshadow-.stat.gid != 0
+        msg: "6.1.7 failed to verify gid. expected: 0. found: {{ etcshadow.stat.gid }}"
+      when: etcshadow.stat.gid != 0
     - fail:
-        msg: "6.1.7 failed to verify permissions. expected: 0600. found: {{ etcshadow-.stat.mode }}"
-      when: etcshadow-.stat.mode != "0600"
+        msg: "6.1.7 failed to verify permissions. expected: 0600. found: {{ etcshadow.stat.mode }}"
+      when: etcshadow.stat.mode != "0600"
   tags:
     - cis
     - cis.6

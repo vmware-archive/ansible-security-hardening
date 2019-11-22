@@ -5,7 +5,6 @@
       owner: root
       group: root
       mode: 0644
-  when: not verify|bool
   tags:
       - cis
       - cis.6
