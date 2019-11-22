@@ -1,0 +1,23 @@
+---
+- name: "6.1.3 Verify permissions on /etc/shadow are configured (Scored)"
+  block:
+    - name: "6.1.3 verify permissions"
+      stat:
+        path: /etc/shadow
+      register: etcshadow
+    - fail:
+        msg: "6.1.3 failed to verify uid. expected: 0. found: {{ etcshadow.stat.uid }}"
+      when: etcshadow.stat.uid != 0
+    - fail:
+        msg: "6.1.3 failed to verify gid. expected: 0. found: {{ etcshadow.stat.gid }}"
+      when: etcshadow.stat.gid != 0
+    - fail:
+        msg: "6.1.3 failed to verify permissions. expected: 0000. found: {{ etcshadow.stat.mode }}"
+      when: etcshadow.stat.mode != "0000"
+  tags:
+    - cis
+    - cis.6
+    - cis.6.1
+    - cis.6.1.3
+    - scored
+
