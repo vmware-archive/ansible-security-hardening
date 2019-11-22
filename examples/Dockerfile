@@ -16,4 +16,4 @@ install python3 \
 shadow \
 photon-release -qy
 
-CMD ["/bin/bash"]
+ENTRYPOINT ["/bin/bash"]

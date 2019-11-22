@@ -4,5 +4,4 @@ services:
 script:
   - docker build examples/ -t ansible-security-hardening
   - docker run --rm  -v$(pwd):/src ansible-security-hardening:latest
-                ansible-playbook  -i /src/examples/chroots /src/cis.playbook.yml
-                --tags "cis" --skip-tags "notscored"
+                /src/examples/remediate_and_verify.sh
