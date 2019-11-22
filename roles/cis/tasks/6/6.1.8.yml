@@ -1,0 +1,15 @@
+---
+- name: "6.1.8 Ensure permissions on /etc/group- are configured (Scored)"
+  file:
+      dest: /etc/group-
+      owner: root
+      group: root
+      mode: 0600
+  when: not verify|bool
+  tags:
+      - cis
+      - cis.6
+      - cis.6.1
+      - cis.6.1.8
+      - scored
+
