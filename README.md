@@ -44,15 +44,12 @@ create a chroot with necessary packages installed
 ```
 rpm --root ~/testroot --initdb
 
+#install python3 for ansible
+#install shadow for cis rule 6.1.2
+#install photon-release for cis rule 1.7.1.6
 tdnf --installroot ~/testroot \
 --releasever 3.0 --nogpgcheck \
-#for ansible
-install python3 \
-#example uses cis rule 6.1.2
-shadow \
-#example use cis rule 1.7.1.6
-photon-release \
--y
+install python3 shadow photon-release -y
 ```
 
 3. Run the cis rule 6.1.2
@@ -183,9 +180,11 @@ Create 6.1.2.yml under the roles/cis/tasks/6 folder
       mode: 0644
   when: not ansible_check_mode
   tags:
+      - cis
+      - cis.6
+      - cis.6.1
+      - cis.6.1.2
       - scored
-      - 6.1
-      - 6.1.2
 ```
 
 Create the optional verify under roles/cis/tasks/6/verify as 6.1.2.yml
@@ -207,9 +206,11 @@ Create the optional verify under roles/cis/tasks/6/verify as 6.1.2.yml
         msg: "6.1.2 failed to verify permissions. expected: 0644. found: {{ etcpass.stat.mode }}"
       when: etcpass.stat.mode != "0644"
   tags:
-    - scored
+    - cis
+    - cis.6
     - cis.6.1
     - cis.6.1.2
+    - scored
 ```
 
 ## Contributing
