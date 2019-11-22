@@ -25,15 +25,15 @@ the project up and running and check it out.
 
 ```
 cd examples
-docker build . -t ansible-security-hardening
+docker build examples/ -t ansible-security-hardening
 ```
 
 We discuss commands and options below. All of them can be run using the docker image as follows.
 Eg: to skip `notscored` tasks
 ```
-docker run --rm  -v/root/ansible-security-hardening:/src \
-ansible-security-hardening:latest \
-ansible-playbook  -i /src/examples/chroots /src/cis.playbook.yml --tags "cis" --skip-tags "notscored"
+docker run --rm  -v$(pwd):/src ansible-security-hardening:latest \
+	ansible-playbook  -i /src/examples/chroots /src/cis.playbook.yml \
+	--tags "cis" --skip-tags "notscored"
 ```
 
 See below for further command examples.
