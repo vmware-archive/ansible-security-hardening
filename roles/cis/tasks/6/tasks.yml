@@ -2,6 +2,7 @@
 - include_tasks: "{{ include_task_rule }}"
   loop:
     - 6.1.2.yml
+    - 6.1.3.yml
   tags:
     - cis
     - cis.6
