@@ -15,6 +15,7 @@ Validation is done by setting `-e verify=true` in command line. verification doe
 
 * ansible (host)
 * python3 (target)
+* awk (target)
 
 ### Build & Run
 
@@ -51,7 +52,9 @@ tdnf --installroot ~/testroot \
 install python3 \
 #example uses cis rule 6.1.2
 shadow \
-#example use cis rule 1.7.1.6
+#example uses cis rule 6.1.10
+awk \
+#example uses cis rule 1.7.1.6
 photon-release \
 -y
 ```
