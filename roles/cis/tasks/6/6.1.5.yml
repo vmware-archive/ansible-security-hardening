@@ -1,0 +1,13 @@
+---
+- name: "6.1.5 Ensure permissions on /etc/gshadow are configured (Scored)"
+  file:
+      dest: /etc/gshadow
+      owner: root
+      group: root
+      mode: 0600
+  tags:
+      - cis
+      - cis.6
+      - cis.6.1
+      - cis.6.1.5
+      - scored

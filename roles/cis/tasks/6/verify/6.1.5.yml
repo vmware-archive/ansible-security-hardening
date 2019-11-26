@@ -1,0 +1,22 @@
+---
+- name: "6.1.5 Verify permissions on /etc/gshadow are configured (Scored)"
+  block:
+    - name: "6.1.5 verify permissions"
+      stat:
+        path: /etc/gshadow
+      register: etcgshadow
+    - fail:
+        msg: "6.1.5 failed to verify uid. expected: 0. found: {{ etcgshadow.stat.uid }}"
+      when: etcgshadow.stat.uid != 0
+    - fail:
+        msg: "6.1.5 failed to verify gid. expected: 0. found: {{ etcgshadow.stat.gid }}"
+      when: etcgshadow.stat.gid != 0
+    - fail:
+        msg: "6.1.5 failed to verify permissions. expected: 0600. found: {{ etcgshadow.stat.mode }}"
+      when: etcgshadow.stat.mode != "0600"
+  tags:
+    - cis
+    - cis.6
+    - cis.6.1
+    - cis.6.1.5
+    - scored

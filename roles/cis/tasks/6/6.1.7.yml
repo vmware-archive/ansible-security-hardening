@@ -1,0 +1,15 @@
+---
+- name: "6.1.7 Ensure permissions on /etc/shadow- are configured (Scored)"
+  file:
+      dest: /etc/shadow-
+      state: touch
+      owner: root
+      group: root
+      mode: 0600
+  tags:
+      - cis
+      - cis.6
+      - cis.6.1
+      - cis.6.1.7
+      - scored
+

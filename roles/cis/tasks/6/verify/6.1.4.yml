@@ -1,0 +1,23 @@
+---
+- name: "6.1.4 Verify permissions on /etc/group are configured (Scored)"
+  block:
+    - name: "6.1.4 verify permissions"
+      stat:
+        path: /etc/group
+      register: etcgroup
+    - fail:
+        msg: "6.1.4 failed to verify uid. expected: 0. found: {{ etcgroup.stat.uid }}"
+      when: etcgroup.stat.uid != 0
+    - fail:
+        msg: "6.1.4 failed to verify gid. expected: 0. found: {{ etcgroup.stat.gid }}"
+      when: etcgroup.stat.gid != 0
+    - fail:
+        msg: "6.1.4 failed to verify permissions. expected: 0644. found: {{ etcgroup.stat.mode }}"
+      when: etcgroup.stat.mode != "0644"
+  tags:
+    - cis
+    - cis.6
+    - cis.6.1
+    - cis.6.1.4
+    - scored
+
