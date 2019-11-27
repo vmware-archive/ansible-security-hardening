@@ -1,31 +1,27 @@
 ---
-- name: "3.1.1 Ensure IP forwarding is disabled (Scored) set net.ipv4.ip_forward to 0"
-  sysctl:
-    name: net.ipv4.ip_forward
-    value: 0
-    sysctl_set: yes
-    state: present
-    reload: yes
-    ignoreerrors: yes
+- name: "3.1.1 Ensure IP forwarding is disabled (Scored)"
+  vars:
+    security_hardening_conf: /etc/sysctl.d/50-security-hardening.conf
+  block:
+    - name: "set net.ipv4.ip_forward to 0"
+      sysctl:
+        name: net.ipv4.ip_forward
+        value: 0
+        sysctl_file: "{{ security_hardening_conf }}"
+        sysctl_set: yes
+        ignoreerrors: yes
+      delegate_to: localhost
+    - name: "set net.ipv6.conf.all.forwarding"
+      sysctl:
+        name: net.ipv6.conf.all.forwarding
+        value: 0
+        sysctl_file: "{{ security_hardening_conf }}"
+        sysctl_set: yes
+        ignoreerrors: yes
+      delegate_to: localhost
   tags:
-      - cis
-      - cis.3
-      - cis.3.1
-      - cis.3.1.1
-      - scored
-- name: "set net.ipv6.conf.all.forwarding"
-  sysctl:
-    name: net.ipv6.conf.all.forwarding
-    value: 0
-    sysctl_set: yes
-    state: present
-    reload: yes
-    ignoreerrors: yes
-  tags:
-      - cis
-      - cis.3
-      - cis.3.1
-      - cis.3.1.1
-      - scored
-
-
+    - cis
+    - cis.3
+    - cis.3.1
+    - cis.3.1.1
+    - scored
