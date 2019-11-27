@@ -14,6 +14,7 @@ Validation is done by setting `-e verify=true` in command line. verification doe
 
 * ansible (host)
 * python3 (target)
+* procps-ng (target)
 
 ### Build & Run
 
@@ -45,10 +46,11 @@ rpm --root ~/testroot --initdb
 
 #install python3 for ansible
 #install shadow for cis rule 6.1.2
+#install procps-ng for cis rule 3.1.1
 #install photon-release for cis rule 1.7.1.6
 tdnf --installroot ~/testroot \
 --releasever 3.0 --nogpgcheck \
-install python3 shadow photon-release -y
+install python3 shadow procps-ng photon-release -y
 ```
 
 3. Run the cis rule 6.1.2
