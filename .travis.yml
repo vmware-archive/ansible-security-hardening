@@ -3,5 +3,5 @@ services:
 
 script:
   - docker build examples/ -t ansible-security-hardening
-  - docker run --rm  -v$(pwd):/src ansible-security-hardening:latest
+  - docker run --privileged --rm  -v$(pwd):/src ansible-security-hardening:latest
                 /src/examples/remediate_and_verify.sh
