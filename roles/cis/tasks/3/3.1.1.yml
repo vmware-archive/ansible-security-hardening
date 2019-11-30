@@ -1,0 +1,40 @@
+---
+- name: "3.1.1 Ensure IP forwarding is disabled (Scored)"
+  vars:
+   security_hardening_conf: /etc/sysctl.d/50-security-hardening.conf
+  block:
+    - name: "install sysctl, requires to be non chroot as it needs access to security hardening conf"
+      shell: |
+        tdnf install procps-ng -y
+        if [ ! -f "{{ security_hardening_conf }}" ]; then
+            if [ ! -d "/etc/sysctl.d" ]; then
+                mkdir /etc/sysctl.d
+            fi
+            touch {{ security_hardening_conf }}
+        fi
+      delegate_to: localhost
+    - name: "set net.ipv4.ip_forward to 0"
+      sysctl:
+        name: net.ipv4.ip_forward
+        value: 0
+        sysctl_file: "{{ security_hardening_conf }}"
+        sysctl_set: yes
+        reload: no
+        ignoreerrors: yes
+      delegate_to: localhost
+    - name: "set net.ipv6.conf.all.forwarding"
+      sysctl:
+        name: net.ipv6.conf.all.forwarding
+        value: 0
+        sysctl_file: "{{ security_hardening_conf }}"
+        sysctl_set: yes
+        reload: no
+        ignoreerrors: yes
+      delegate_to: localhost
+  tags:
+    - cis
+    - cis.3
+    - cis.3.1
+    - cis.3.1.1
+    - scored
+
