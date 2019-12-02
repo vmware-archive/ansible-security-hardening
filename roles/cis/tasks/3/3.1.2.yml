@@ -1,5 +1,5 @@
 ---
-- name: "3.1.1 Ensure IP forwarding is disabled (Scored)"
+- name: "3.1.2 Ensure packet redirect sending is disabled (Scored)"
   vars:
    security_hardening_conf: /etc/sysctl.d/50-security-hardening.conf
   block:
@@ -13,25 +13,25 @@
             touch {{ security_hardening_conf }}
         fi
       delegate_to: localhost
-    - name: "3.1.1 set net.ipv4.ip_forward to 0"
+    - name: "3.1.2 et net.ipv4.conf.all.send_redirects to 0"
       sysctl:
-        name: net.ipv4.ip_forward
+        name: net.ipv4.conf.all.send_redirects
         value: 0
         sysctl_file: "{{ security_hardening_conf }}"
         sysctl_set: yes
         reload: no
         ignoreerrors: yes
       delegate_to: localhost
-    - name: "3.1.1 set net.ipv6.conf.all.forwarding to 0"
+    - name: "3.1.2 set net.ipv4.conf.default.send_redirects to 0"
       sysctl:
-        name: net.ipv6.conf.all.forwarding
+        name: net.ipv4.conf.default.send_redirects
         value: 0
         sysctl_file: "{{ security_hardening_conf }}"
         sysctl_set: yes
         reload: no
         ignoreerrors: yes
       delegate_to: localhost
-    - name: "3.1.1 set net.ipv4.route.flush to 1"
+    - name: "3.1.2 set net.ipv4.route.flush to 1"
       sysctl:
         name: net.ipv4.route.flush
         value: 1
@@ -44,6 +44,6 @@
     - cis
     - cis.3
     - cis.3.1
-    - cis.3.1.1
+    - cis.3.1.2
     - scored
 
