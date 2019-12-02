@@ -3,71 +3,62 @@
   vars:
    security_hardening_conf: /etc/sysctl.d/50-security-hardening.conf
   block:
-    - name: "install sysctl, requires to be non chroot as it needs access to security hardening conf"
+    - name: "verify if 50-security-hardening.conf is present"
       shell: |
-        tdnf install procps-ng -y
         if [ ! -f "{{ security_hardening_conf }}" ]; then
             if [ ! -d "/etc/sysctl.d" ]; then
                 mkdir /etc/sysctl.d
             fi
             touch {{ security_hardening_conf }}
         fi
-      delegate_to: localhost
     - name: "3.2.1 set net.ipv4.conf.all.accept_source_route to 0"
       sysctl:
         name: net.ipv4.conf.all.accept_source_route
-        value: 0
+        value: '0'
         sysctl_file: "{{ security_hardening_conf }}"
         sysctl_set: yes
         reload: no
         ignoreerrors: yes
-      delegate_to: localhost
     - name: "3.2.1 set net.ipv4.conf.default.accept_source_route to 0"
       sysctl:
         name: net.ipv4.conf.default.accept_source_route
-        value: 0
+        value: '0'
         sysctl_file: "{{ security_hardening_conf }}"
         sysctl_set: yes
         reload: no
         ignoreerrors: yes
-      delegate_to: localhost
     - name: "3.2.1 set net.ipv4.route.flush to 1"
       sysctl:
         name: net.ipv4.route.flush
-        value: 1
+        value: '1'
         sysctl_file: "{{ security_hardening_conf }}"
         sysctl_set: yes
         reload: no
         ignoreerrors: yes
-      delegate_to: localhost
     - name: "3.2.1 set net.ipv6.conf.all.accept_source_route to 0"
       sysctl:
         name: net.ipv6.conf.all.accept_source_route
-        value: 0
+        value: '0'
         sysctl_file: "{{ security_hardening_conf }}"
         sysctl_set: yes
         reload: no
         ignoreerrors: yes
-      delegate_to: localhost
     - name: "3.2.1 set net.ipv6.conf.default.accept_source_route to 0"
       sysctl:
         name: net.ipv6.conf.default.accept_source_route
-        value: 0
+        value: '0'
         sysctl_file: "{{ security_hardening_conf }}"
         sysctl_set: yes
         reload: no
         ignoreerrors: yes
-      delegate_to: localhost
     - name: "3.2.1 set net.ipv6.route.flush to 1"
       sysctl:
         name: net.ipv6.route.flush
-        value: 1
+        value: '1'
         sysctl_file: "{{ security_hardening_conf }}"
         sysctl_set: yes
         reload: no
         ignoreerrors: yes
-      delegate_to: localhost
-
   tags:
     - cis
     - cis.3
