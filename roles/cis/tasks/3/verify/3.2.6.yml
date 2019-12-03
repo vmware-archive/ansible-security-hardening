@@ -1,0 +1,26 @@
+---
+- name: "3.2.6 Verify if bogus ICMP responses are ignored (Scored)"
+# Verifying the bogus ICMP response settings in /etc/sysctl.d/50-security-hardening.conf
+  vars:
+    security_hardening_conf: "/etc/sysctl.d/50-security-hardening.conf"
+    net_ipv4_icmp_ignore_bogus_responses_expected: "net.ipv4.icmp_ignore_bogus_error_responses=1"
+    net_ipv4_flush_expected: "net.ipv4.route.flush=1"
+  block:
+    - name: "3.2.6 verify if net.ipv4.icmp_ignore_bogus_error_responses is set to 1"
+      command: grep -Fxq {{ net_ipv4_icmp_ignore_bogus_responses_expected }} {{ security_hardening_conf }}
+      register: output_1
+    - fail:
+        msg: "3.2.6 failed to verify if bogus ICMP responses are ignored, net.ipv4.icmp_ignore_bogus_error_responses is not set to 1"
+      when: output_1.rc != 0
+    - name: "3.2.6 verify if net.ipv4.route.flush is set to 1"
+      command: grep -Fxq {{ net_ipv4_flush_expected }} {{ security_hardening_conf }}
+      register: output_2
+    - fail:
+        msg: "3.2.6 failed to verify if bogus ICMP responses are ignored, net.ipv4.route.flush is not set to 1"
+      when: output_2.rc != 0
+  tags:
+    - cis
+    - cis.3
+    - cis.3.2
+    - cis.3.2.6
+    - scored
