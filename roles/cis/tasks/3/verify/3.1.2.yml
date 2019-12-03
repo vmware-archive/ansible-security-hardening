@@ -1,0 +1,33 @@
+---
+- name: "3.1.2 Verify if packet redirect sending is disabled (Scored)"
+# Verifying the packet redirect settings in /etc/sysctl.d/50-security-hardening.conf
+  vars:
+    security_hardening_conf: "/etc/sysctl.d/50-security-hardening.conf"
+    net_ipv4_redirects_expected: "net.ipv4.conf.all.send_redirects=0"
+    net_ipv4_default_redirects_expected: "net.ipv4.conf.default.send_redirects=0"
+    net_ipv4_flush_expected: "net.ipv4.route.flush=1"
+  block:
+    - name: "3.1.2 verify if net.ipv4.conf.all.send_redirects is set to 0"
+      command: grep -Fxq {{ net_ipv4_redirects_expected }} {{ security_hardening_conf }}
+      register: output_1
+    - fail:
+        msg: "3.1.2 failed to verify if packet redirect sending is disabled, net.ipv4.conf.all.send_redirects is not set to 0"
+      when: output_1.rc != 0
+    - name: "3.1.2 verify if net.ipv4.conf.default.send_redirects is set to 0"
+      command: grep -Fxq {{ net_ipv4_default_redirects_expected }} {{ security_hardening_conf }}
+      register: output_2
+    - fail:
+        msg: "3.1.2 failed to verify if packet redirect sending is disabled, net.ipv4.conf.default.send_redirects is not set to 0"
+      when: output_2.rc != 0
+    - name: "3.1.2 verify if net.ipv4.route.flush is set to 1"
+      command: grep -Fxq {{ net_ipv4_flush_expected }} {{ security_hardening_conf }}
+      register: output_3
+    - fail:
+        msg: "3.1.2 failed to verify if packet redirect sending is disabled, net.ipv4.route.flush is not set to 1"
+      when: output_3.rc != 0
+  tags:
+    - cis
+    - cis.3
+    - cis.3.1
+    - cis.3.1.2
+    - scored

@@ -1,0 +1,54 @@
+---
+- name: "3.2.1 Verify if routed packets are not accepted (Scored)"
+# Verifying the routed packet settings in /etc/sysctl.d/50-security-hardening.conf
+  vars:
+    security_hardening_conf: "/etc/sysctl.d/50-security-hardening.conf"
+    net_ipv4_src_route_expected: "net.ipv4.conf.all.accept_source_route=0"
+    net_ipv4_default_src_route_expected: "net.ipv4.conf.default.accept_source_route=0"
+    net_ipv4_flush_expected: "net.ipv4.route.flush=1"
+    net_ipv6_src_route_expected: "net.ipv6.conf.all.accept_source_route=0"
+    net_ipv6_default_src_route_expected: "net.ipv6.conf.default.accept_source_route=0"
+    net_ipv6_flush_expected: "net.ipv6.route.flush=1"
+  block:
+    - name: "3.2.1 verify if net.ipv4.conf.all.accept_source_route is set to 0"
+      command: grep -Fxq {{ net_ipv4_src_route_expected }} {{ security_hardening_conf }}
+      register: output_1
+    - fail:
+        msg: "3.2.1 failed to verify if routed packets are not accepted, net.ipv4.conf.all.accept_source_route is not set to 0"
+      when: output_1.rc != 0
+    - name: "3.2.1 verify if net.ipv4.conf.default.accept_source_route is set to 0"
+      command: grep -Fxq {{ net_ipv4_default_src_route_expected }} {{ security_hardening_conf }}
+      register: output_2
+    - fail:
+        msg: "3.2.1 failed to verify if routed packets are not accepted, net.ipv4.conf.default.accept_source_route is not set to 0"
+      when: output_2.rc != 0
+    - name: "3.2.1 verify if net.ipv4.route.flush is set to 1"
+      command: grep -Fxq {{ net_ipv4_flush_expected }} {{ security_hardening_conf }}
+      register: output_3
+    - fail:
+        msg: "3.2.1 failed to verify if routed packets are not accepted, net.ipv4.route.flush is not set to 1"
+      when: output_3.rc != 0
+    - name: "3.2.1 verify if net.ipv6.conf.all.accept_source_route is set to 0"
+      command: grep -Fxq {{ net_ipv6_src_route_expected }} {{ security_hardening_conf }}
+      register: output_4
+    - fail:
+        msg: "3.2.1 failed to verify if routed packets are not accepted, net.ipv6.conf.all.accept_source_route is not set to 0"
+      when: output_4.rc != 0
+    - name: "3.2.1 verify if net.ipv6.conf.default.accept_source_route is set to 0"
+      command: grep -Fxq {{ net_ipv6_default_src_route_expected }} {{ security_hardening_conf }}
+      register: output_5
+    - fail:
+        msg: "3.2.1 failed to verify if routed packets are not accepted, net.ipv6.conf.default.accept_source_route is not set to 0"
+      when: output_5.rc != 0
+    - name: "3.2.1 verify if net.ipv6.route.flush is set to 1"
+      command: grep -Fxq {{ net_ipv6_flush_expected }} {{ security_hardening_conf }}
+      register: output_6
+    - fail:
+        msg: "3.2.1 failed to verify if routed packets are not accepted, net.ipv6.route.flush is not set to 1"
+      when: output_6.rc != 0
+  tags:
+    - cis
+    - cis.3
+    - cis.3.2
+    - cis.3.2.1
+    - scored

@@ -5,21 +5,26 @@
     security_hardening_conf: "/etc/sysctl.d/50-security-hardening.conf"
     net_ipv4_fwd_expected: "net.ipv4.ip_forward=0"
     net_ipv6_conf_expected: "net.ipv6.conf.all.forwarding=0"
+    net_ipv4_flush_expected: "net.ipv4.route.flush=1"
   block:
-    - name: "verify if net.ipv4.ip_forward is set to 0"
+    - name: "3.1.1 verify if net.ipv4.ip_forward is set to 0"
       command: grep -Fxq {{ net_ipv4_fwd_expected }} {{ security_hardening_conf }}
       register: output_1
-      delegate_to: localhost
     - fail:
         msg: "3.1.1 failed to verify if IP forwarding is disabled, net.ipv4.ip_forward is not set to 0"
       when: output_1.rc != 0
-    - name: "verify if net.ipv6.conf.all.forwarding is set to 0"
+    - name: "3.1.1 verify if net.ipv6.conf.all.forwarding is set to 0"
       command: grep -Fxq {{ net_ipv6_conf_expected }} {{ security_hardening_conf }}
       register: output_2
-      delegate_to: localhost
     - fail:
         msg: "3.1.1 failed to verify if IP forwarding is disabled, net.ipv6.conf.all.forwarding is not set to 0"
       when: output_2.rc != 0
+    - name: "3.1.1 verify if net.ipv4.route.flush is set to 1"
+      command: grep -Fxq {{ net_ipv4_flush_expected }} {{ security_hardening_conf }}
+      register: output_3
+    - fail:
+        msg: "3.1.1 failed to verify if IP forwarding is disabled, net.ipv4.route.flush is not set to 1"
+      when: output_3.rc != 0
   tags:
     - cis
     - cis.3
