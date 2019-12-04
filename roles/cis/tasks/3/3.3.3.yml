@@ -1,0 +1,25 @@
+---
+- name: "3.3.3 Ensure IPv6 is disabled (Not Scored)"
+  vars:
+   CIS_conf: /etc/modprobe.d/CIS.conf
+  block:
+    - name: "verify if CIS.conf is present"
+      shell: |
+        if [ ! -f "{{ CIS_conf }}" ]; then
+            if [ ! -d "/etc/modprobe.d" ]; then
+                mkdir /etc/modprobe.d
+            fi
+            touch {{ CIS_conf }}
+        fi
+    - name: "3.3.3 write IPv6 disable setting to CIS.conf"
+      shell: |
+        LINE='options ipv6 disable=1'
+        FILE="{{ CIS_conf }}"
+        grep -qF -- "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
+  tags:
+    - cis
+    - cis.3
+    - cis.3.3
+    - cis.3.3.3
+    - notscored
+
