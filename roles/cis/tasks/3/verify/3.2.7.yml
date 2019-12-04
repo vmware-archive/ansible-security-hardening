@@ -1,0 +1,33 @@
+---
+- name: "3.2.7 Verify if Reverse Path Filtering is enabled (Scored)"
+# Verifying the reverse path filtering settings in /etc/sysctl.d/50-security-hardening.conf
+  vars:
+    security_hardening_conf: "/etc/sysctl.d/50-security-hardening.conf"
+    net_ipv4_rp_filter_expected: "net.ipv4.conf.all.rp_filter=1"
+    net_ipv4_default_rp_filter_expected: "net.ipv4.conf.default.rp_filter=1"
+    net_ipv4_flush_expected: "net.ipv4.route.flush=1"
+  block:
+    - name: "3.2.7 verify if net.ipv4.conf.all.rp_filter is set to 1"
+      command: grep -Fxq {{ net_ipv4_rp_filter_expected }} {{ security_hardening_conf }}
+      register: output_1
+    - fail:
+        msg: "3.2.7 failed to verify if Reverse Path Filtering is enabled, net.ipv4.conf.all.rp_filter is not set to 1"
+      when: output_1.rc != 0
+    - name: "3.2.7 verify if net.ipv4.conf.default.rp_filter is set to 1"
+      command: grep -Fxq {{ net_ipv4_default_rp_filter_expected }} {{ security_hardening_conf }}
+      register: output_2
+    - fail:
+        msg: "3.2.7 failed to verify if Reverse Path Filtering is enabled, net.ipv4.conf.default.rp_filter is not set to 1"
+      when: output_2.rc != 0
+    - name: "3.2.7 verify if net.ipv4.route.flush is set to 1"
+      command: grep -Fxq {{ net_ipv4_flush_expected }} {{ security_hardening_conf }}
+      register: output_3
+    - fail:
+        msg: "3.2.7 failed to verify if Reverse Path Filtering is enabled, net.ipv4.route.flush is not set to 1"
+      when: output_3.rc != 0
+  tags:
+    - cis
+    - cis.3
+    - cis.3.2
+    - cis.3.2.7
+    - scored

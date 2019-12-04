@@ -1,0 +1,36 @@
+---
+- name: "3.2.6 Ensure bogus ICMP responses are ignored (Scored)"
+  vars:
+   security_hardening_conf: /etc/sysctl.d/50-security-hardening.conf
+  block:
+    - name: "verify if 50-security-hardening.conf is present"
+      shell: |
+        if [ ! -f "{{ security_hardening_conf }}" ]; then
+            if [ ! -d "/etc/sysctl.d" ]; then
+                mkdir /etc/sysctl.d
+            fi
+            touch {{ security_hardening_conf }}
+        fi
+    - name: "3.2.6 set net.ipv4.icmp_ignore_bogus_error_responses to 1"
+      sysctl:
+        name: net.ipv4.icmp_ignore_bogus_error_responses
+        value: '1'
+        sysctl_file: "{{ security_hardening_conf }}"
+        sysctl_set: yes
+        reload: no
+        ignoreerrors: yes
+    - name: "3.2.6 set net.ipv4.route.flush to 1"
+      sysctl:
+        name: net.ipv4.route.flush
+        value: '1'
+        sysctl_file: "{{ security_hardening_conf }}"
+        sysctl_set: yes
+        reload: no
+        ignoreerrors: yes
+  tags:
+    - cis
+    - cis.3
+    - cis.3.2
+    - cis.3.2.6
+    - scored
+

@@ -1,0 +1,26 @@
+---
+- name: "3.2.8 Verify if TCP SYN Cookies is enabled (Scored)"
+# Verifying the TCP SYN cookies settings in /etc/sysctl.d/50-security-hardening.conf
+  vars:
+    security_hardening_conf: "/etc/sysctl.d/50-security-hardening.conf"
+    net_ipv4_tcp_syncookies_expected: "net.ipv4.tcp_syncookies=1"
+    net_ipv4_flush_expected: "net.ipv4.route.flush=1"
+  block:
+    - name: "3.2.8 verify if net.ipv4.tcp_syncookies is set to 1"
+      command: grep -Fxq {{ net_ipv4_tcp_syncookies_expected }} {{ security_hardening_conf }}
+      register: output_1
+    - fail:
+        msg: "3.2.8 failed to verify if  TCP SYN Cookies is enabled, net.ipv4.tcp_syncookies is not set to 1"
+      when: output_1.rc != 0
+    - name: "3.2.8 verify if net.ipv4.route.flush is set to 1"
+      command: grep -Fxq {{ net_ipv4_flush_expected }} {{ security_hardening_conf }}
+      register: output_2
+    - fail:
+        msg: "3.2.8 failed to verify if  TCP SYN Cookies is enabled, net.ipv4.route.flush is not set to 1"
+      when: output_2.rc != 0
+  tags:
+    - cis
+    - cis.3
+    - cis.3.2
+    - cis.3.2.8
+    - scored
