@@ -1,0 +1,33 @@
+---
+- name: "3.3.1 Verify if IPv6 router advertisements are not accepted (Scored)"
+# Verifying the IPv6 router advertisement settings in /etc/sysctl.d/50-security-hardening.conf
+  vars:
+    security_hardening_conf: "/etc/sysctl.d/50-security-hardening.conf"
+    net_ipv6_accept_ra_expected: "net.ipv6.conf.all.accept_ra=0"
+    net_ipv6_default_accept_ra_expected: "net.ipv6.conf.default.accept_ra=0"
+    net_ipv6_flush_expected: "net.ipv6.route.flush=1"
+  block:
+    - name: "3.3.1 verify if net.ipv6.conf.all.accept_ra is set to 0"
+      command: grep -Fxq {{ net_ipv6_accept_ra_expected }} {{ security_hardening_conf }}
+      register: output_1
+    - fail:
+        msg: "3.3.1 failed to verify if IPv6 router advertisements are not accepted, net.ipv6.conf.all.accept_ra is not set to 0"
+      when: output_1.rc != 0
+    - name: "3.3.1 verify if net.ipv6.conf.default.accept_ra is set to 0"
+      command: grep -Fxq {{ net_ipv6_default_accept_ra_expected }} {{ security_hardening_conf }}
+      register: output_2
+    - fail:
+        msg: "3.3.1 failed to verify if IPv6 router advertisements are not accepted, net.ipv6.conf.default.accept_ra is not set to 0"
+      when: output_2.rc != 0
+    - name: "3.3.1 verify if net.ipv6.route.flush is set to 1"
+      command: grep -Fxq {{ net_ipv6_flush_expected }} {{ security_hardening_conf }}
+      register: output_3
+    - fail:
+        msg: "3.3.1 failed to verify if IPv6 router advertisements are not accepted, net.ipv6.route.flush is not set to 1"
+      when: output_3.rc != 0
+  tags:
+    - cis
+    - cis.3
+    - cis.3.3
+    - cis.3.3.1
+    - scored

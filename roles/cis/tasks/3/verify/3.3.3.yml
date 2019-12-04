@@ -1,0 +1,19 @@
+---
+- name: "3.3.3 Verify if IPv6 is disabled (Not Scored)"
+# Verifying the IPv6 disablement settings in /etc/modprobe.d/CIS.conf
+  vars:
+    CIS_conf: "/etc/modprobe.d/CIS.conf"
+    ipv6_disable_expected: "options ipv6 disable=1"
+  block:
+    - name: "3.3.3 verify if IPv6 is disabled"
+      command: grep -Fq {{ ipv6_disable_expected }} {{ CIS_conf }}
+      register: output_1
+    - fail:
+        msg: "3.3.3 failed to verify if IPv6 is disabled, ipv6 disable is not set to 1 in /etc/modprobe.d/CIS.conf"
+      when: output_1.rc != 0
+  tags:
+    - cis
+    - cis.3
+    - cis.3.3
+    - cis.3.3.3
+    - notscored
