@@ -1,0 +1,23 @@
+---
+- name: "3.4.5 Verify permissions on /etc/hosts.deny are configured (Scored)"
+  block:
+    - name: "3.4.5 verify permissions"
+      stat:
+        path: /etc/hosts.deny
+      register: etchosts_deny
+    - fail:
+        msg: "3.4.5 failed to verify uid. expected: 0. found: {{ etchosts_deny.stat.uid }}"
+      when: etchosts_deny.stat.uid != 0
+    - fail:
+        msg: "3.4.5 failed to verify gid. expected: 0. found: {{ etchosts_deny.stat.gid }}"
+      when: etchosts_deny.stat.gid != 0
+    - fail:
+        msg: "3.4.5 failed to verify permissions. expected: 0644. found: {{ etchosts_deny.stat.mode }}"
+      when: etchosts_deny.stat.mode != "0644"
+  tags:
+    - cis
+    - cis.3
+    - cis.3.4
+    - cis.3.4.5
+    - scored
+

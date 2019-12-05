@@ -1,0 +1,15 @@
+---
+- name: "3.4.4 Ensure permissions on /etc/hosts.allow are configured (Scored)"
+  file:
+      dest: /etc/hosts.allow
+      state: touch
+      owner: root
+      group: root
+      mode: 0644
+  tags:
+      - cis
+      - cis.3
+      - cis.3.4
+      - cis.3.4.4
+      - scored
+
