@@ -1,0 +1,15 @@
+---
+- name: "6.1.12 Ensure no ungrouped files or directories exist (Scored)"
+  shell: |
+     entry=''
+     file_list=''
+     list="$(df -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -nogroup)"
+     for entry in $file_list; do
+       chgrp root "$entry"
+     done
+  tags:
+      - cis
+      - cis.6
+      - cis.6.1
+      - cis.6.1.12
+      - scored

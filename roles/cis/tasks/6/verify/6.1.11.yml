@@ -1,0 +1,11 @@
+---
+- name: "6.1.11 Verify no unowned files or directories exist (Scored)"
+  shell: df --local -P | awk if (NR!=1) print $6 | xargs -I '{}' find '{}' -xdev -nouser
+  register: output
+  failed_when: output.stdout|int != 0
+  tags:
+    - cis
+    - cis.6
+    - cis.6.1
+    - cis.6.1.11
+    - scored
