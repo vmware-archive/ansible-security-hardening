@@ -17,7 +17,7 @@
         path: /etc/modprobe.d/modprobe.conf
       register: output_2
     - name: "create modprobe.conf if it does not exist"
-      file: path=/etc/modprobe.d/modprobe.conf state=touch owner=root group=sys mode=0555
+      file: path=/etc/modprobe.d/modprobe.conf state=touch owner=root group=sys mode=0644
       when: output_2.stat.exists == false
     - name: "3.5.1 write DCCP setting to modprobe.conf"
       lineinfile:
