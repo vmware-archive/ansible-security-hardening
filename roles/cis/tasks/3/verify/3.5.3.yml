@@ -5,12 +5,16 @@
     modprobe_conf: "/etc/modprobe.d/modprobe.conf"
     rds_settings_expected: "install rds /bin/true"
   block:
-    - name: "3.5.3 verify if RDS is disabled"
-      command: grep -Fq {{ rds_settings_expected }} {{ modprobe_conf }}
-      register: output_1
+    - name: 3.5.3 Verify if RDS is disabled (Not Scored)
+      lineinfile:
+        name: "{{ modprobe_conf }}"
+        line: "{{ rds_settings_expected }}"
+        state: present
+      check_mode: yes
+      register: presence
     - fail:
-        msg: "3.5.3 failed to verify if RDS is disabled, settings of RDS is not expected in /etc/modprobe.d/modprobe.conf"
-      when: output_1.rc != 0
+        msg: 3.5.3 failed to verify if RDS is disabled, settings of RDS is not expected in {{ modprobe_conf }}
+      when: presence is changed
   tags:
     - cis
     - cis.3

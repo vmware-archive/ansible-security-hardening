@@ -5,12 +5,16 @@
     modprobe_conf: "/etc/modprobe.d/modprobe.conf"
     tipc_settings_expected: "install tipc /bin/true"
   block:
-    - name: "3.5.4 verify if TIPC is disabled"
-      command: grep -Fq {{ tipc_settings_expected }} {{ modprobe_conf }}
-      register: output_1
+    - name: 3.5.4 Verify if TIPC is disabled (Not Scored)
+      lineinfile:
+        name: "{{ modprobe_conf }}"
+        line: "{{ tipc_settings_expected }}"
+        state: present
+      check_mode: yes
+      register: presence
     - fail:
-        msg: "3.5.4 failed to verify if TIPC is disabled, settings of TIPC is not expected in /etc/modprobe.d/modprobe.conf"
-      when: output_1.rc != 0
+        msg: 3.5.4 failed to verify if TIPC is disabled, settings of TIPC is not expected in {{ modprobe_conf }}
+      when: presence is changed
   tags:
     - cis
     - cis.3
