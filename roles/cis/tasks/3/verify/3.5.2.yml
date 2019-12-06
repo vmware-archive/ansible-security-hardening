@@ -1,0 +1,19 @@
+---
+- name: "3.5.2 Verify if SCTP is disabled (Not Scored)"
+# Verifying the SCTP disablement settings in /etc/modprobe.d/modprobe.conf
+  vars:
+    modprobe_conf: "/etc/modprobe.d/modprobe.conf"
+    sctp_settings_expected: "install sctp /bin/true"
+  block:
+    - name: "3.5.2 verify if SCTP is disabled"
+      command: grep -Fq {{ sctp_settings_expected }} {{ modprobe_conf }}
+      register: output_1
+    - fail:
+        msg: "3.5.2 failed to verify if SCTP is disabled, settings of SCTP is not expected in /etc/modprobe.d/modprobe.conf"
+      when: output_1.rc != 0
+  tags:
+    - cis
+    - cis.3
+    - cis.3.5
+    - cis.3.5.2
+    - notscored

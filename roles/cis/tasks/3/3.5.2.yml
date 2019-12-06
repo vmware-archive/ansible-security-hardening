@@ -1,0 +1,25 @@
+---
+- name: "3.5.2 Ensure SCTP is disabled (Not Scored)"
+  vars:
+   modprobe_conf: /etc/modprobe.d/modprobe.conf
+  block:
+    - name: "verify if modprobe.conf is present"
+      shell: |
+        if [ ! -f "{{ modprobe_conf }}" ]; then
+            if [ ! -d "/etc/modprobe.d" ]; then
+                mkdir /etc/modprobe.d
+            fi
+            touch {{ modprobe_conf }}
+        fi
+    - name: "3.5.2 write SCTP setting to modprobe.conf"
+      shell: |
+        LINE='install sctp /bin/true'
+        FILE="{{ modprobe_conf }}"
+        grep -qF -- "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
+  tags:
+    - cis
+    - cis.3
+    - cis.3.5
+    - cis.3.5.2
+    - notscored
+
