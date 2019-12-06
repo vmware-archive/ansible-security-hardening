@@ -3,19 +3,26 @@
   vars:
    modprobe_conf: /etc/modprobe.d/modprobe.conf
   block:
-    - name: "verify if modprobe.conf is present"
-      shell: |
-        if [ ! -f "{{ modprobe_conf }}" ]; then
-            if [ ! -d "/etc/modprobe.d" ]; then
-                mkdir /etc/modprobe.d
-            fi
-            touch {{ modprobe_conf }}
-        fi
+    - name: "register the stat output of modprobe.d directory"
+      stat:
+        path: /etc/modprobe.d
+      register: output_1
+    - name: "create modprobe.d directory if it does not exist"
+      file:
+        path: /etc/modprobe.d
+        state: directory
+      when: output_1.stat.exists == false
+    - name: "register the stat output of modprobe.conf"
+      stat:
+        path: /etc/modprobe.d/modprobe.conf
+      register: output_2
+    - name: "create modprobe.conf if it does not exist"
+      file: path=/etc/modprobe.d/modprobe.conf state=touch owner=root group=sys mode=0555
+      when: output_2.stat.exists == false
     - name: "3.5.4 write TIPC setting to modprobe.conf"
-      shell: |
-        LINE='install tipc /bin/true'
-        FILE="{{ modprobe_conf }}"
-        grep -qF -- "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
+      lineinfile:
+        dest: "{{ modprobe_conf }}"
+        line: "install tipc /bin/true"
   tags:
     - cis
     - cis.3
