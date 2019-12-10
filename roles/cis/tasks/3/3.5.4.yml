@@ -1,0 +1,32 @@
+---
+- name: "3.5.4 Ensure TIPC is disabled (Not Scored)"
+  vars:
+   modprobe_conf: /etc/modprobe.d/modprobe.conf
+  block:
+    - name: "register the stat output of modprobe.d directory"
+      stat:
+        path: /etc/modprobe.d
+      register: output_1
+    - name: "create modprobe.d directory if it does not exist"
+      file:
+        path: /etc/modprobe.d
+        state: directory
+      when: output_1.stat.exists == false
+    - name: "register the stat output of modprobe.conf"
+      stat:
+        path: /etc/modprobe.d/modprobe.conf
+      register: output_2
+    - name: "create modprobe.conf if it does not exist"
+      file: path=/etc/modprobe.d/modprobe.conf state=touch owner=root group=sys mode=0644
+      when: output_2.stat.exists == false
+    - name: "3.5.4 write TIPC setting to modprobe.conf"
+      lineinfile:
+        dest: "{{ modprobe_conf }}"
+        line: "install tipc /bin/true"
+  tags:
+    - cis
+    - cis.3
+    - cis.3.5
+    - cis.3.5.4
+    - notscored
+

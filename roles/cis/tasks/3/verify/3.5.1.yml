@@ -1,0 +1,23 @@
+---
+- name: "3.5.1 Verify if DCCP is disabled (Not Scored)"
+# Verifying the DCCP disablement settings in /etc/modprobe.d/modprobe.conf
+  vars:
+    modprobe_conf: "/etc/modprobe.d/modprobe.conf"
+    dccp_settings_expected: "install dccp /bin/true"
+  block:
+    - name: 3.5.1 Verify if DCCP is disabled (Not Scored)
+      lineinfile:
+        name: "{{ modprobe_conf }}"
+        line: "{{ dccp_settings_expected }}"
+        state: present
+      check_mode: yes
+      register: presence
+    - fail:
+        msg: 3.5.1 failed to verify if DCCP is disabled, settings of DCCP is not expected in {{ modprobe_conf }}
+      when: presence is changed
+  tags:
+    - cis
+    - cis.3
+    - cis.3.5
+    - cis.3.5.1
+    - notscored
