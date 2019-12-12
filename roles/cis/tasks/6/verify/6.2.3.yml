@@ -1,0 +1,22 @@
+---
+- name: "6.2.3 Verify if no legacy + entries exist in /etc/shadow (Scored)"
+  vars:
+    file: /etc/shadow
+  block:
+    - name: 6.2.3 Verify if no legacy + entries exist in /etc/shadow
+      lineinfile:
+        path: "{{ file }}"
+        line: "+:"
+        state: present
+      check_mode: yes
+      register: presence
+    - fail:
+        msg: 6.2.3 failed to verify if no legacy + entries exist, legacy + entries are present in {{ file }}
+      when: presence is not changed
+  tags:
+    - cis
+    - cis.6
+    - cis.6.2
+    - cis.6.2.3
+    - scored
+

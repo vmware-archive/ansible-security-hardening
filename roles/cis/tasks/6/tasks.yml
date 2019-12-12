@@ -9,6 +9,9 @@
     - 6.1.7.yml
     - 6.1.8.yml
     - 6.1.9.yml
+    - 6.2.2.yml
+    - 6.2.3.yml
+    - 6.2.4.yml
   tags:
     - cis
     - cis.6

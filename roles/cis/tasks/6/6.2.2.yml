@@ -1,0 +1,15 @@
+---
+- name: "6.2.2 Ensure no legacy + entries exist in /etc/passwd (Scored)"
+  vars:
+    file: /etc/passwd
+  lineinfile:
+    path: "{{ file }}"
+    state: absent 
+    regexp: '^\+:'
+  tags:
+    - cis
+    - cis.6
+    - cis.6.2
+    - cis.6.2.2
+    - scored
+
