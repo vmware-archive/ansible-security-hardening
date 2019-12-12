@@ -1,0 +1,15 @@
+---
+- name: "6.1.10 Ensure no world writable files exist (Scored)"
+  shell: |
+     entry=''
+     file_list=''
+     file_list="$(df -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -type f -perm -0002)"
+     for entry in $file_list; do
+       chmod o-w "$entry"
+     done
+  tags:
+      - cis
+      - cis.6
+      - cis.6.1
+      - cis.6.1.10
+      - scored
