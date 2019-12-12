@@ -1,0 +1,11 @@
+---
+- name: "6.1.10 Verify no world writable files exist (Scored)"
+  shell: df --local -P | awk if (NR!=1) print $6 | xargs -I '{}' find '{}' -xdev -type f -perm -0002
+  register: output
+  failed_when: output.stdout|int != 0
+  tags:
+    - cis
+    - cis.6
+    - cis.6.1
+    - cis.6.1.10
+    - scored
