@@ -1,23 +1,22 @@
 ---
 - name: "3.6.2 Verify default deny firewall policy (Scored)"
-  vars:
-    input_policy: "Chain INPUT (policy DROP)"
-    forward_policy: "Chain FORWARD (policy DROP)"
-    output_policy: "Chain OUTPUT (policy DROP)"
   block:
     - name: 3.6.2 Verify default deny firewall policy
-      command: "iptables -L"
+      iptables:
+        chain: "{{line_item}}"
+        policy: DROP
+      become: yes
+      with_items:
+        - INPUT
+        - FORWARD
+        - OUTPUT
+      loop_control:
+        loop_var: line_item
+      check_mode: yes
       register: output
-      ignore_errors: true
     - fail:
-        msg: 3.6.2 failed to verify default deny firewall policy, check INPUT policy
-      when: "input_policy not in output.stdout"
-    - fail:
-        msg: 3.6.2 failed to verify default deny firewall policy, check FORWARD policy
-      when: "forward_policy not in output.stdout"
-    - fail:
-        msg: 3.6.2 failed to verify default deny firewall policy, check OUTPUT policy
-      when: "output_policy not in output.stdout"
+        msg: " 3.6.2 Verify default deny firewall policy failed, please check DROP policy"
+      when: "'All items completed' not in output.msg"
   tags:
     - cis
     - cis.3
