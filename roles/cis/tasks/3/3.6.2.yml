@@ -1,0 +1,19 @@
+---
+- name: "3.6.2 Ensure default deny firewall policy (Scored)"
+  iptables:
+    chain: "{{line_item}}"
+    policy: DROP
+  become: yes
+  with_items:
+    - INPUT
+    - FORWARD
+    - OUTPUT
+  loop_control:
+    loop_var: line_item
+  tags:
+    - cis
+    - cis.3
+    - cis.3.6
+    - cis.3.6.2
+    - scored
+

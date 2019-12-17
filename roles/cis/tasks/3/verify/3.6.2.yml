@@ -1,0 +1,25 @@
+---
+- name: "3.6.2 Verify default deny firewall policy (Scored)"
+  block:
+    - name: 3.6.2 Verify default deny firewall policy
+      iptables:
+        chain: "{{line_item}}"
+        policy: DROP
+      become: yes
+      with_items:
+        - INPUT
+        - FORWARD
+        - OUTPUT
+      loop_control:
+        loop_var: line_item
+      check_mode: yes
+      register: output
+    - fail:
+        msg: " 3.6.2 Verify default deny firewall policy failed, please check DROP policy"
+      when: "'All items completed' not in output.msg"
+  tags:
+    - cis
+    - cis.3
+    - cis.3.6
+    - cis.3.6.2
+    - scored

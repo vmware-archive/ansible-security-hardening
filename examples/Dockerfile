@@ -11,6 +11,7 @@ RUN rpm --root /root/testroot --initdb
 #shadow for rule 6.1.2
 #procps-ng for rule 3.1.1
 #awk for rule 6.1.10
+#iptables for rule 3.6.2 onwards
 #photon-release for rule 1.7.1.6
 RUN tdnf --installroot ~/testroot \
 --releasever 3.0 --nogpgcheck \
@@ -18,6 +19,7 @@ install python3 \
 shadow \
 procps-ng \
 awk \
+iptables \
 photon-release -qy
 
 ENTRYPOINT ["/bin/bash"]
