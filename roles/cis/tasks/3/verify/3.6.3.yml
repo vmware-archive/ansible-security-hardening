@@ -1,0 +1,43 @@
+---
+- name: "3.6.3 Verify loopback traffic is configured (Scored)"
+  block:
+    - name: 3.6.3 Verify INPUT loopback with source 0.0.0.0/0
+      iptables:
+        chain: INPUT
+        in_interface: "lo"
+        jump: ACCEPT
+      become: yes
+      check_mode: yes
+      register: output1
+    - fail:
+        msg: "3.6.3 Verify INPUT loopback with source 0.0.0.0/0 failed, please check loopback traffic configuration"
+      when: output1.failed == true
+    - name: 3.6.3 Verify OUTPUT loopback with source 0.0.0.0/0
+      iptables:
+        chain: OUTPUT
+        out_interface: "lo"
+        jump: ACCEPT
+      become: yes
+      check_mode: yes
+      register: output2
+    - fail:
+        msg: "3.6.3 Verify OUTPUT loopback with source 0.0.0.0/0 failed, please check loopback traffic configuration"
+      when: output2.failed == true
+    - name: 3.6.3 Verify INPUT loopback with source 127.0.0.0/8
+      iptables:
+        chain: INPUT
+        source: 127.0.0.0/8
+        jump: DROP
+      become: yes
+      check_mode: yes
+      register: output3
+    - fail:
+        msg: "3.6.3 Verify INPUT loopback with source 127.0.0.0/8 failed, please check loopback traffic configuration"
+      when: output3.failed == true
+  tags:
+    - cis
+    - cis.3
+    - cis.3.6
+    - cis.3.6.3
+    - scored
+

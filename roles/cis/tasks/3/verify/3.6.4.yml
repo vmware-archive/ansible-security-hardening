@@ -1,0 +1,88 @@
+---
+- name: "3.6.4 Verify outbound and established connections are configured (Not Scored)"
+  block:
+    - name: 3.6.4 Verify outbound, established connections for OUTPUT for TCP protocol
+      iptables:
+        chain: OUTPUT
+        protocol: tcp
+        match: state
+        ctstate: ESTABLISHED,NEW
+        jump: ACCEPT
+      become: yes
+      check_mode: yes
+      register: output1
+    - fail:
+        msg: "3.6.4 Verify outbound, established connections for OUTPUT for TCP protocol failed, please check outbound, established connections configuration"
+      when: output1.failed == true
+    - name: 3.6.4 Verify outbound, established connections for OUTPUT for UDP protocol
+      iptables:
+        chain: OUTPUT
+        protocol: udp
+        match: state
+        ctstate: ESTABLISHED,NEW
+        jump: ACCEPT
+      become: yes
+      check_mode: yes
+      register: output2
+    - fail:
+        msg: "3.6.4 Verify outbound, established connections for OUTPUT for UDP protocol failed, please check outbound, established connections configuration"
+      when: output2.failed == true
+    - name: 3.6.4 Verify outbound, established connections for OUTPUT for icmp protocol
+      iptables:
+        chain: OUTPUT
+        protocol: icmp
+        match: state
+        ctstate: ESTABLISHED,NEW
+        jump: ACCEPT
+      become: yes
+      check_mode: yes
+      register: output3
+    - fail:
+        msg: "3.6.4 Verify outbound, established connections for OUTPUT for icmp protocol failed, please check outbound, established connections configuration"
+      when: output3.failed == true
+    - name: 3.6.4 Verify outbound, established connections for INPUT for tcp protocol
+      iptables:
+        chain: INPUT
+        protocol: tcp
+        match: state
+        ctstate: ESTABLISHED
+        jump: ACCEPT
+      become: yes
+      check_mode: yes
+      register: output4
+    - fail:
+        msg: "3.6.4 Verify outbound, established connections for INPUT for tcp protocol failed, please check outbound, established connections configuration"
+      when: output4.failed == true
+    - name: 3.6.4 Verify outbound, established connections for INPUT for udp protocol
+      iptables:
+        chain: INPUT
+        protocol: udp
+        match: state
+        ctstate: ESTABLISHED
+        jump: ACCEPT
+      become: yes
+      check_mode: yes
+      register: output5
+    - fail:
+        msg: "3.6.4 Verify outbound, established connections for INPUT for udp protocol failed, please check outbound, established connections configuration"
+      when: output5.failed == true
+    - name: 3.6.4 Verify outbound, established connections for INPUT for icmp protocol
+      iptables:
+        chain: INPUT
+        protocol: icmp
+        match: state
+        ctstate: ESTABLISHED
+        jump: ACCEPT
+      become: yes
+      check_mode: yes
+      register: output6
+    - fail:
+        msg: "3.6.4 Verify outbound, established connections for INPUT for icmp protocol failed, please check outbound, established connections configuration"
+      when: output6.failed == true
+  tags:
+    - cis
+    - cis.3
+    - cis.3.6
+    - cis.3.6.4
+    - notscored
+
