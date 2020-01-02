@@ -1,0 +1,24 @@
+---
+- name: "3.6.5 Verify firewall rules exist for all open ports (Scored)"
+  block:
+    - name: 3.6.5 Verify firewall rules for protocol TCP for port 22
+      iptables:
+        chain: INPUT
+        protocol: tcp
+        destination_port: '22'
+        match: state
+        ctstate: NEW
+        jump: ACCEPT
+      become: yes
+      check_mode: yes
+      register: output
+    - fail:
+        msg: "3.6.5 Verify firewall rules for TCP port 22 failed, please check firewall rules"
+      when: output.failed == true
+  tags:
+    - cis
+    - cis.3
+    - cis.3.6
+    - cis.3.6.5
+    - scored
+
