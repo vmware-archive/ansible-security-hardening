@@ -17,6 +17,7 @@
     - 3.4.5.yml
     - 3.6.2.yml
     - 3.6.3.yml
+    - 3.6.5.yml
   tags:
     - cis
     - cis.3
