@@ -1,0 +1,23 @@
+---
+- name: "5.1.3 Verify permissions on /etc/cron.hourly are configured (Scored)"
+  block:
+    - name: "5.1.3 verify permissions"
+      stat:
+        path: /etc/cron.hourly
+      register: etc_cron_hourly_result
+    - fail:
+        msg: "5.1.3 failed to verify uid. expected: 0. found: {{ etc_cron_hourly_result.stat.uid }}"
+      when: etc_cron_hourly_result.stat.uid != 0
+    - fail:
+        msg: "5.1.3 failed to verify gid. expected: 0. found: {{ etc_cron_hourly_result.stat.gid }}"
+      when: etc_cron_hourly_result.stat.gid != 0
+    - fail:
+        msg: "5.1.3 failed to verify permissions. expected: 0600. found: {{ etc_cron_hourly_result.stat.mode }}"
+      when: etc_cron_hourly_result.stat.mode != "0600"
+  tags:
+    - cis
+    - cis.5
+    - cis.5.1
+    - cis.5.1.3
+    - scored
+

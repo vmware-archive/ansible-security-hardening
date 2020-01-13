@@ -1,0 +1,13 @@
+---
+- name: "5.2.1 Ensure permissions on /etc/ssh/sshd_config are configured (Scored)"
+  file:
+    path: "/etc/ssh/sshd_config"
+    owner: root
+    group: root
+    mode: 0600
+  tags:
+      - cis
+      - cis.5
+      - cis.5.2
+      - cis.5.2.1
+      - scored

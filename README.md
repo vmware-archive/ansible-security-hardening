@@ -17,6 +17,8 @@ Validation is done by setting `-e verify=true` in command line. verification doe
 * procps-ng (target)
 * awk (target)
 * iptables (target)
+* cronie (target)
+* openssh (target)
 
 ### Build & Run
 
@@ -51,10 +53,12 @@ rpm --root ~/testroot --initdb
 #install awk for cis rule 6.1.10
 #install procps-ng for cis rule 3.1.1
 #install iptables for cis rule 3.6.2
+#install cronie for cis rule 5.1
+#install openssh for cis rule 5.2
 #install photon-release for cis rule 1.7.1.6
 tdnf --installroot ~/testroot \
 --releasever 3.0 --nogpgcheck \
-install python3 shadow awk procps-ng iptables photon-release -y
+install python3 shadow awk procps-ng iptables cronie openssh photon-release -y
 ```
 
 3. Run the cis rule 6.1.2
