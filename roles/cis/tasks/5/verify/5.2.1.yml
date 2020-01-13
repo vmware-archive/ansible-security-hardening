@@ -1,0 +1,23 @@
+---
+- name: "5.2.1 Verify permissions on /etc/ssh/sshd_config are configured (Scored)"
+  block:
+    - name: "5.2.1 verify permissions"
+      stat:
+        path: /etc/ssh/sshd_config
+      register: sshd_config_result
+    - fail:
+        msg: "5.2.1 failed to verify uid. expected: 0. found: {{ sshd_config_result.stat.uid }}"
+      when: sshd_config_result.stat.uid != 0
+    - fail:
+        msg: "5.2.1 failed to verify gid. expected: 0. found: {{ sshd_config_result.stat.gid }}"
+      when: sshd_config_result.stat.gid != 0
+    - fail:
+        msg: "5.2.1 failed to verify permissions. expected: 0600. found: {{ sshd_config_result.stat.mode }}"
+      when: sshd_config_result.stat.mode != "0600"
+  tags:
+    - cis
+    - cis.5
+    - cis.5.2
+    - cis.5.2.1
+    - scored
+
