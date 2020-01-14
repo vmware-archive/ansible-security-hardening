@@ -1,0 +1,22 @@
+---
+- name: "5.2.4 Verify SSH X11 forwarding is disabled (Scored)"
+  vars:
+    file: /etc/ssh/sshd_config
+  block:
+    - name: "5.2.4 Verify SSH X11 forwarding is disabled"
+      lineinfile:
+        path: "{{ file }}"
+        line: "X11Forwarding no"
+        state: present
+      check_mode: yes
+      register: presence
+    - fail:
+        msg: "5.2.4 failed to Verify SSH X11 forwarding is disabled. Expected: Entries X11Forwarding no in the file {{ file }}"
+      when: presence is changed
+  tags:
+    - cis
+    - cis.5
+    - cis.5.2
+    - cis.5.2.4
+    - scored
+

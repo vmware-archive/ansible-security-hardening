@@ -1,0 +1,22 @@
+---
+- name: "5.2.14 Verify SSH LoginGraceTime is set to one minute or less (Scored)."
+  vars:
+    file: /etc/ssh/sshd_config
+  block:
+    - name: "5.2.14 Verify SSH LoginGraceTime is set to one minute or less"
+      lineinfile:
+        path: "{{ file }}"
+        line: "LoginGraceTime 60"
+        state: present
+      check_mode: yes
+      register: presence
+    - fail:
+        msg: "5.2.14 failed to Verify SSH LoginGraceTime is set to one minute or less. Expected: Entries, LoginGraceTime 60, in the file {{ file }}"
+      when: presence is changed
+  tags:
+    - cis
+    - cis.5
+    - cis.5.2
+    - cis.5.2.14
+    - scored
+

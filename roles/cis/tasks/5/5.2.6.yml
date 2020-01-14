@@ -1,0 +1,14 @@
+---
+- name: "5.2.6 Ensure SSH IgnoreRhosts is enabled (Scored)"
+  vars:
+    file: /etc/ssh/sshd_config
+  lineinfile:
+    path: "{{ file }}"
+    regexp: '^#IgnoreRhosts'
+    line: "IgnoreRhosts yes"
+  tags:
+      - cis
+      - cis.5
+      - cis.5.2
+      - cis.5.2.6
+      - scored

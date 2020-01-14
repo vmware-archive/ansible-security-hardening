@@ -1,0 +1,22 @@
+---
+- name: "5.2.11 Verify only approved ciphers are used (Scored)" 
+  vars:
+    file: /etc/ssh/sshd_config
+  block:
+    - name: "5.2.11 Verify only approved ciphers are used."
+      lineinfile:
+        path: "{{ file }}"
+        line: "Ciphers aes256-ctr,aes192-ctr,aes128-ctr"
+        state: present
+      check_mode: yes
+      register: presence
+    - fail:
+        msg: "5.2.11 failed to Verify only approved ciphers are used."
+      when: presence is changed
+  tags:
+    - cis
+    - cis.5
+    - cis.5.2
+    - cis.5.2.11
+    - scored
+
