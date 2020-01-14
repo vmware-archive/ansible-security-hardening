@@ -3,7 +3,7 @@
   vars:
     file: /etc/ssh/sshd_config
   block:
-    - name: "5.2.2 verify SSH Protocol is set to 2"
+    - name: "5.2.2 Verify SSH Protocol is set to 2"
       lineinfile:
         path: "{{ file }}"
         line: "Protocol 2"
