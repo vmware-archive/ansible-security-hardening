@@ -1,0 +1,14 @@
+---
+- name: "5.2.10 Ensure SSH PermitUserEnvironment is disabled (Scored)"
+  vars:
+    file: /etc/ssh/sshd_config
+  lineinfile:
+    path: "{{ file }}"
+    regexp: "^#PermitUserEnvironment"
+    line: "PermitUserEnvironment no"
+  tags:
+      - cis
+      - cis.5
+      - cis.5.2
+      - cis.5.2.10
+      - scored

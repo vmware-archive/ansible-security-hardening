@@ -1,0 +1,13 @@
+---
+- name: "5.1.6 Ensure permissions on /etc/cron.monthly are configured (Scored)"
+  file:
+    path: "/etc/cron.monthly"
+    owner: root
+    group: root
+    mode: 0600
+  tags:
+      - cis
+      - cis.5
+      - cis.5.1
+      - cis.5.1.6
+      - scored

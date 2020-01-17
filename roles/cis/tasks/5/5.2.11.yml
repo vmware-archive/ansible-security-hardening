@@ -1,0 +1,14 @@
+---
+- name: "5.2.11 Ensure only approved ciphers are used (Scored)"
+  vars:
+    file: /etc/ssh/sshd_config
+  lineinfile:
+    path: "{{ file }}"
+    insertafter: "^# Ciphers and keying"
+    line: "Ciphers aes256-ctr,aes192-ctr,aes128-ctr"
+  tags:
+      - cis
+      - cis.5
+      - cis.5.2
+      - cis.5.2.11
+      - scored

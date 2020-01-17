@@ -1,0 +1,14 @@
+---
+- name: "5.2.16 Ensure SSH warning banner is configured (Scored)"
+  vars:
+    file: /etc/ssh/sshd_config
+  lineinfile:
+    path: "{{ file }}"
+    regexp: "^#Banner none$"
+    line: "Banner /etc/issue.net"
+  tags:
+      - cis
+      - cis.5
+      - cis.5.2
+      - cis.5.2.16
+      - scored

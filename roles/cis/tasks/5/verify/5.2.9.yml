@@ -1,0 +1,22 @@
+---
+- name: "5.2.9 Verify SSH PermitEmptyPasswords is disabled (Scored)"
+  vars:
+    file: /etc/ssh/sshd_config
+  block:
+    - name: "5.2.9 Verify SSH PermitEmptyPasswords is disabled"
+      lineinfile:
+        path: "{{ file }}"
+        line: "PermitEmptyPasswords no"
+        state: present
+      check_mode: yes
+      register: presence
+    - fail:
+        msg: "5.2.9 failed to Verify SSH PermitEmptyPasswords is disabled. Expected: Entries PermitEmptyPasswords no in the file {{ file }}"
+      when: presence is changed
+  tags:
+    - cis
+    - cis.5
+    - cis.5.2
+    - cis.5.2.9
+    - scored
+

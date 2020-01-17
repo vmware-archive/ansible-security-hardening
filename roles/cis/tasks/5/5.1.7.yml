@@ -1,0 +1,13 @@
+---
+- name: "5.1.7 Ensure permissions on /etc/cron.d are configured (Scored)"
+  file:
+    path: "/etc/cron.d"
+    owner: root
+    group: root
+    mode: 0600
+  tags:
+      - cis
+      - cis.5
+      - cis.5.1
+      - cis.5.1.7
+      - scored

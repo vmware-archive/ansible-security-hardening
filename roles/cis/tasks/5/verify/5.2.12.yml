@@ -1,0 +1,27 @@
+---
+- name: "5.2.12 Verify only approved MAC algorithms are used (Scored)."
+  vars:
+    file: /etc/ssh/sshd_config
+  block:
+    - name: "5.2.12 Verify only approved MAC algorithms are used."
+      lineinfile:
+        path: "{{ file }}"
+        line: "{{ my_result.line }}"
+        state: present
+      check_mode: yes
+      with_items:
+        - { line: "# MAC algorithms"}
+        - { line: "MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com"}
+      loop_control:
+        loop_var: my_result
+      register: presence
+    - fail:
+        msg: "5.2.12 failed to Verify only approved MAC algorithms are used."
+      when: presence is changed
+  tags:
+    - cis
+    - cis.5
+    - cis.5.2
+    - cis.5.2.12
+    - scored
+

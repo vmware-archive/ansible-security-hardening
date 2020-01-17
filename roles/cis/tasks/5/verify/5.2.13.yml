@@ -1,0 +1,27 @@
+---
+- name: "5.2.13 Verify SSH Idle Timeout Interval is configured (Scored)."
+  vars:
+    file: /etc/ssh/sshd_config
+  block:
+    - name: "5.2.13 Verify SSH Idle Timeout Interval is configured."
+      lineinfile:
+        path: "{{ file }}"
+        line: "{{ my_result.line }}"
+        state: present
+      check_mode: yes
+      with_items:
+        - { line: "ClientAliveInterval 300"}
+        - { line: "ClientAliveCountMax 0"}
+      loop_control:
+        loop_var: my_result
+      register: presence
+    - fail:
+        msg: "5.2.13 failed to Verify SSH Idle Timeout Interval is configured."
+      when: presence is changed
+  tags:
+    - cis
+    - cis.5
+    - cis.5.2
+    - cis.5.2.13
+    - scored
+

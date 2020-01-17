@@ -1,0 +1,19 @@
+---
+- name: "5.2.13 Ensure SSH Idle Timeout Interval is configured (Scored)"
+  vars:
+    file: /etc/ssh/sshd_config
+  lineinfile:
+    path: "{{ file }}"
+    regexp: "{{ my_result.regexp }}"
+    line: "{{ my_result.line }}"
+  with_items:
+    - { regexp: "^#ClientAliveInterval 0$", line: "ClientAliveInterval 300"}
+    - { regexp: "^ClientAliveCountMax 2$", line: "ClientAliveCountMax 0"}
+  loop_control:
+    loop_var: my_result
+  tags:
+      - cis
+      - cis.5
+      - cis.5.2
+      - cis.5.2.13
+      - scored

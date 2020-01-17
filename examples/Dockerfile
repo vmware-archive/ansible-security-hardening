@@ -20,6 +20,8 @@ shadow \
 procps-ng \
 awk \
 iptables \
+cronie \
+openssh \
 photon-release -qy
 
 ENTRYPOINT ["/bin/bash"]

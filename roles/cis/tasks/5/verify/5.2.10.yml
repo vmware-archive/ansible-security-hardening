@@ -1,0 +1,22 @@
+---
+- name: "5.2.10 Verify SSH PermitUserEnvironment is disabled (Scored)"
+  vars:
+    file: /etc/ssh/sshd_config
+  block:
+    - name: "5.2.10 Verify SSH PermitUserEnvironment is disabled."
+      lineinfile:
+        path: "{{ file }}"
+        line: "PermitUserEnvironment no"
+        state: present
+      check_mode: yes
+      register: presence
+    - fail:
+        msg: "5.2.10 failed to Verify SSH PermitUserEnvironment is disabled. Expected: Entries, PermitUserEnvironment no, in the file {{ file }}"
+      when: presence is changed
+  tags:
+    - cis
+    - cis.5
+    - cis.5.2
+    - cis.5.2.10
+    - scored
+

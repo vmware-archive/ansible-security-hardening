@@ -1,0 +1,14 @@
+---
+- name: "5.2.5 Ensure SSH MaxAuthTries is set to 4 or less (Scored)"
+  vars:
+    file: /etc/ssh/sshd_config
+  lineinfile:
+    path: "{{ file }}"
+    regexp: "^MaxAuthTries 2"
+    line: "MaxAuthTries 2"
+  tags:
+      - cis
+      - cis.5
+      - cis.5.2
+      - cis.5.2.5
+      - scored

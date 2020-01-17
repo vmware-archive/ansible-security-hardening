@@ -1,0 +1,13 @@
+---
+- name: "5.1.5 Ensure permissions on /etc/cron.weekly are configured (Scored)"
+  file:
+    path: "/etc/cron.weekly"
+    owner: root
+    group: root
+    mode: 0600
+  tags:
+      - cis
+      - cis.5
+      - cis.5.1
+      - cis.5.1.5
+      - scored

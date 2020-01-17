@@ -1,0 +1,13 @@
+---
+- name: "5.1.4 Ensure permissions on /etc/cron.daily are configured (Scored)"
+  file:
+    path: "/etc/cron.daily"
+    owner: root
+    group: root
+    mode: 0600
+  tags:
+      - cis
+      - cis.5
+      - cis.5.1
+      - cis.5.1.4
+      - scored
