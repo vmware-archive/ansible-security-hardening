@@ -1,0 +1,60 @@
+---
+- name: "5.2.15 Verify SSH access is limited (Scored)"
+  vars:
+    file: /etc/ssh/sshd_config
+    SSH_AllowUsers: "" # comma-delimited users allow to ssh access
+    SSH_AllowGroups: "" # comma-delimited groups allow to ssh access
+    SSH_DenyUsers: "" # comma-delimited users deny to ssh access
+    SSH_DenyGroups: "" # comma-delimited groups deny to ssh access
+  block:
+    - name: "5.2.15 Verify SSH Allowed for Users"
+      lineinfile:
+        path: "{{ file }}"
+        line: "AllowUsers {{ SSH_AllowUsers }}"
+        state: present
+      check_mode: yes
+      register: AllowUsers_presence
+    - fail:
+        msg: "5.2.15 failed to Verify SSH Allowed for Users"
+      when: AllowUsers_presence is changed
+
+    - name: "5.2.15 Verify SSH Allowed for Groups"
+      lineinfile:
+        path: "{{ file }}"
+        line: "AllowGroups {{ SSH_AllowGroups }}"
+        state: present
+      check_mode: yes
+      register: AllowGroups_presence
+    - fail:
+        msg: "5.2.15 failed to Verify SSH Allowed for Groups"
+      when: AllowGroups_presence is changed
+
+    - name: "5.2.15 Verify SSH Deny for Users"
+      lineinfile:
+        path: "{{ file }}"
+        line: "DenyUsers {{ SSH_DenyUsers }}"
+        state: present
+      check_mode: yes
+      register: DenyUsers_presence
+    - fail:
+        msg: "5.2.15 failed to Verify SSH Deny for Users"
+      when: DenyUsers_presence is changed
+
+    - name: "5.2.15 Verify SSH Deny for Groups"
+      lineinfile:
+        path: "{{ file }}"
+        line: "DenyGroups {{ SSH_DenyGroups }}"
+        state: present
+      check_mode: yes
+      register: DenyGroups_presence
+    - fail:
+        msg: "5.2.15 failed to Verify SSH Deny for Groups"
+      when: DenyGroups_presence is changed
+
+  tags:
+    - cis
+    - cis.5
+    - cis.5.2
+    - cis.5.2.15
+    - scored
+

@@ -1,0 +1,59 @@
+---
+- name: "5.1.8 Verify at/cron is restricted to authorized users (Scored)"
+  vars:
+    file_cron_deny: /etc/cron.deny
+    file_at_deny: /etc/at.deny
+    file_cron_allow: /etc/cron.allow
+    file_at_allow: /etc/at.allow
+  block:
+    - name: "5.1.8 Verify file cron.deny not exist"
+      stat:
+        path: "{{ file_cron_deny }}"
+      register: cron_deny_res
+    - fail:
+        msg: "5.1.8 failed to Verify file cron.deny not exist"
+      when: cron_deny_res.stat.exists == true
+
+    - name: "5.1.8 Verify file at.deny not exist"
+      stat:
+        path: "{{ file_at_deny }}"
+      register: at_deny_res
+    - fail:
+        msg: "5.1.8 failed to Verify file at.deny not exist"
+      when: at_deny_res.stat.exists == true
+
+    - name: "5.1.8 Verify file cron.allow exist"
+      stat:
+        path: "{{ file_cron_allow }}"
+      register: cron_allow_res
+    - fail:
+        msg: "5.1.8 failed to Verify uid for the file cron.allow. expected: 0. found: {{ cron_allow_res.stat.uid }}"
+      when: cron_allow_res.stat.uid != 0
+    - fail:
+        msg: "5.1.8 failed to Verify gid for the file cron.allow. expected: 0. found: {{ cron_allow_res.stat.gid }}"
+      when: cron_allow_res.stat.gid != 0
+    - fail:
+        msg: "5.1.8 failed to Verify permissions for the file cron.allow. expected: 0600. found: {{ cron_allow_res.stat.mode }}"
+      when: cron_allow_res.stat.mode != "0600"
+
+    - name: "5.1.8 Verify file at.allow exist"
+      stat:
+        path: "{{ file_at_allow }}"
+      register: at_allow_res
+    - fail:
+        msg: "5.1.8 failed to Verify uid for the file at.allow. expected: 0. found: {{ at_allow_res.stat.uid }}"
+      when: at_allow_res.stat.uid != 0
+    - fail:
+        msg: "5.1.8 failed to Verify gid for the file at.allow. expected: 0. found: {{ at_allow_res.stat.gid }}"
+      when: at_allow_res.stat.gid != 0
+    - fail:
+        msg: "5.1.8 failed to Verify permissions for the file at.allow. expected: 0600. found: {{ at_allow_res.stat.mode }}"
+      when: at_allow_res.stat.mode != "0600"
+
+  tags:
+    - cis
+    - cis.5
+    - cis.5.1
+    - cis.5.1.8
+    - scored
+

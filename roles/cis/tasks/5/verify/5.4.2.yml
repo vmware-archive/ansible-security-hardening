@@ -1,0 +1,18 @@
+---
+- name: "5.4.2 Verify system accounts are non-login (Scored)"
+  block:
+    - name: "5.4.2 Verify system accounts are non-login"
+      shell: "egrep -v \"^\\+\" \/etc\/passwd | awk -F: '($1!=\"root\" && $1!=\"sync\" && $1!=\"shutdown\" && $1!=\"halt\" && $3<1000 && $7!=\"/sbin/nologin\" && $7!=\"/bin/false\") {print}'"
+      register: results
+      check_mode: no
+      changed_when: False
+    - fail:
+        msg: "5.4.2 Failed to Verify system accounts are non-login."
+      when: results.stdout != ""
+  tags:
+    - cis
+    - cis.5
+    - cis.5.4
+    - cis.5.4.2
+    - scored
+

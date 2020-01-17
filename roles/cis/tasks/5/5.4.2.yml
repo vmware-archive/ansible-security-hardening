@@ -1,0 +1,32 @@
+---
+- name: "5.4.2 Ensure system accounts are non-login (Scored)"
+  vars:
+    cis_skip_lock_users:
+      - root
+      - halt
+      - shutdown
+      - sync
+  block:
+    - name: "5.4.2 Obtain system accounts"
+      shell: "awk -F: '($3 < 1000) {print $1 }' /etc/passwd"
+      register: egrep_5_4_2
+      check_mode: no
+      changed_when: False
+    - name: "5.4.2 Lock system user passwords"
+      command: "usermod -L {{ my_result }}"
+      with_items: "{{ egrep_5_4_2.stdout_lines }}"
+      when: item != "root"
+      loop_control:
+        loop_var: my_result
+    - name: "5.4.2 Ensure system accounts are non-login"
+      command: "usermod -s /sbin/nologin {{ my_result }}"
+      with_items: "{{ egrep_5_4_2.stdout_lines }}"
+      when: "item not in cis_skip_lock_users"
+      loop_control:
+        loop_var: my_result
+  tags:
+      - cis
+      - cis.5
+      - cis.5.4
+      - cis.5.4.2
+      - scored

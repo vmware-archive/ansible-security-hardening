@@ -1,0 +1,19 @@
+---
+- name: "5.3.4 Ensure password hashing algorithm is SHA-512 (Scored)"
+  vars:
+    file: /etc/pam.d/system-auth
+  lineinfile:
+    path: "{{ file }}"
+    line: "{{ my_result.line }}"
+    insertbefore: "^# End /etc/pam.d/system-auth$"
+  with_items:
+    - { line: "# Set password hashing algorithm" } 
+    - { line: "password sufficient pam_unix.so sha512" } 
+  loop_control:
+    loop_var: my_result
+  tags:
+      - cis
+      - cis.5
+      - cis.5.3
+      - cis.5.3.4
+      - scored

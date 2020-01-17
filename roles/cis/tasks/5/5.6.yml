@@ -1,0 +1,26 @@
+---
+- name: "5.6 Ensure access to the su command is restricted (Scored)"
+  vars:
+    file_su: /etc/pam.d/su
+    file_group: /etc/group
+  block:
+    - name: "5.6 Ensure access to the su command is restricted"
+      lineinfile:
+        path: "{{ file_su }}"
+        line: "{{ my_result.line }}"
+        insertbefore: "^# End /etc/pam.d/su$"
+      with_items:
+        - { line: "# Restrict access to su command" }
+        - { line: "auth required pam_wheel.so use_uid" }
+      loop_control:
+        loop_var: my_result 
+    - name: "5.6 Configure wheel group members who can access the su command"
+      lineinfile:
+        path: "{{ file_group }}"
+        regexp: "^wheel:"
+        line: "wheel:x:10:root"
+  tags:
+      - cis
+      - cis.5
+      - cis.5.6
+      - scored

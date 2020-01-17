@@ -1,0 +1,39 @@
+---
+- name: "5.6 Verify access to the su command is restricted (Scored)"
+  vars:
+    file_su: /etc/pam.d/su
+    file_group: /etc/group
+  block:
+    - name: "5.6 Verify access to the su command is restricted"
+      lineinfile:
+        path: "{{ file_su }}"
+        line: "{{ my_result.line }}"
+        state: present
+      check_mode: yes
+      with_items:
+        - { line: "# Restrict access to su command"}
+        - { line: "auth required pam_wheel.so use_uid"}
+      loop_control:
+        loop_var: my_result
+      register: use_uid_presence
+    - fail:
+        msg: "5.6 failed to Verify access to the su command is restricted"
+      when: use_uid_presence is changed
+
+    - name: "5.6 Verify wheel group members can access the su command"
+      lineinfile:
+        path: "{{ file_group }}"
+        line: "wheel:x:10:root"
+        state: present
+      check_mode: yes
+      register: wheel_presence
+    - fail:
+        msg: "5.6 failed to Verify wheel group members can access the su command"
+      when: wheel_presence is changed
+
+  tags:
+    - cis
+    - cis.5
+    - cis.5.6
+    - scored
+

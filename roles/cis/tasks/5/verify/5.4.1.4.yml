@@ -1,0 +1,24 @@
+---
+- name: "5.4.1.4 Verify inactive password lock is 30 days or less (Scored)"
+  vars:
+    file: /etc/default/useradd
+    pass_inactive_lock_days: 30
+  block:
+    - name: "5.4.1.4 Verify inactive password lock is 30 days or less"
+      lineinfile:
+        path: "{{ file }}"
+        line: "INACTIVE {{ pass_inactive_lock_days }}"
+        state: present
+      check_mode: yes
+      register: presence
+    - fail:
+        msg: "5.4.1.4 Failed to Verify inactive password lock."
+      when: presence is changed
+  tags:
+    - cis
+    - cis.5
+    - cis.5.4
+    - cis.5.4.1
+    - cis.5.4.1.4
+    - scored
+

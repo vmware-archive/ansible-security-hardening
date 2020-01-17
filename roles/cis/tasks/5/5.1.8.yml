@@ -1,0 +1,36 @@
+---
+- name: "5.1.8 Ensure at/cron is restricted to authorized users (Scored)"
+  vars:
+    file_cron_deny: /etc/cron.deny
+    file_at_deny: /etc/at.deny
+    file_cron_allow: /etc/cron.allow
+    file_at_allow: /etc/at.allow
+  block:
+    - name: "5.1.8 Ensure file cron.deny not exist"
+      file:
+        path: "{{ file_cron_deny }}"
+        state: absent
+    - name: "5.1.8 Ensure file at.deny not exist"
+      file:
+        path: "{{ file_at_deny }}"
+        state: absent
+    - name: "5.1.8 Ensure file cron.allow exist"
+      file:
+        path: "{{ file_cron_allow }}"
+        state: touch
+        owner: root
+        group: root
+        mode: 0600
+    - name: "5.1.8 Ensure file at.allow exist"
+      file:
+        path: "{{ file_at_allow }}"
+        state: touch
+        owner: root
+        group: root
+        mode: 0600
+  tags:
+      - cis
+      - cis.5
+      - cis.5.1
+      - cis.5.1.8
+      - scored

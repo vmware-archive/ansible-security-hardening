@@ -1,0 +1,23 @@
+---
+- name: "5.3.1 Ensure password creation requirements are configured (Scored)"
+  vars:
+    file: /etc/pam.d/system-auth
+  lineinfile:
+    path: "{{ file }}"
+    line: "{{ my_result.line }}"
+    insertbefore: "^# End /etc/pam.d/system-auth$"
+  with_items:
+    - { line: "# Set Password Creation Requirements" } 
+    - { line: "minlen=14" } 
+    - { line: "dcredit=-1" } 
+    - { line: "ucredit=-1" } 
+    - { line: "ocredit=-1" } 
+    - { line: "lcredit=-1" } 
+  loop_control:
+    loop_var: my_result
+  tags:
+      - cis
+      - cis.5
+      - cis.5.3
+      - cis.5.3.1
+      - scored
