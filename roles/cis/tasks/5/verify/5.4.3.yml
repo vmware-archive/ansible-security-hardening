@@ -1,0 +1,18 @@
+---
+- name: "5.4.3 Verify default group for the root account is GID 0 (Scored)"
+  block:
+    - name: "5.4.3 Verify default group for the root account is GID 0"
+      shell: "grep \"^root:\" /etc/passwd | cut -f4 -d:"
+      register: results
+      check_mode: no
+      changed_when: False
+    - fail:
+        msg: "5.4.3 Failed to Verify default group for the root account is GID 0"
+      when: results.stdout != "0"
+  tags:
+    - cis
+    - cis.5
+    - cis.5.4
+    - cis.5.4.3
+    - scored
+

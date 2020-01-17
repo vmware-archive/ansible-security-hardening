@@ -1,0 +1,14 @@
+---
+- name: "5.4.4 Ensure default user umask is 027 or more restrictive (Scored)"
+  vars:
+    file: /etc/profile
+  lineinfile:
+    path: "{{ file }}"
+    regexp: "^umask\\s027$"
+    line: "umask 027"
+  tags:
+      - cis
+      - cis.5
+      - cis.5.4
+      - cis.5.4.4
+      - scored

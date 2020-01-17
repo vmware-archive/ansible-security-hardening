@@ -1,0 +1,22 @@
+---
+- name: "5.4.4 Verify default user umask is 027 or more restrictive (Scored)"
+  vars:
+    file: /etc/profile
+  block:
+    - name: "5.4.4 Verify default user umask is 027 or more restrictive"
+      lineinfile:
+        path: "{{ file }}"
+        line: "umask 027"
+        state: present
+      check_mode: yes
+      register: presence
+    - fail:
+        msg: "5.4.4 failed to Verify Verify default user umask is 027 or more restrictive. Expected: Entries, umask 027, in the file {{ file }}"
+      when: presence is changed
+  tags:
+    - cis
+    - cis.5
+    - cis.5.4
+    - cis.5.4.4
+    - scored
+
