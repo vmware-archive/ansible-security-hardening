@@ -1,0 +1,19 @@
+---
+- name: "5.5 Ensure root login is restricted to system console (Not Scored)"
+  vars:
+    file_securetty: /etc/securetty
+  block:
+    - name: "5.5 Check if file /etc/securetty present"
+      stat:
+        path: "{{ file_securetty }}"
+      register: stat_result
+    - name: "5.5 Ensure root login is restricted to system console"
+      file:
+        path: "{{ file_securetty }}"
+        state: absent
+      when: stat_result.stat.exists == True
+  tags:
+      - cis
+      - cis.5
+      - cis.5.5
+      - notscored

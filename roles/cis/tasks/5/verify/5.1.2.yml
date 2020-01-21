@@ -1,0 +1,30 @@
+---
+- name: "5.1.2 Verify permissions on /etc/crontab are configured (Scored)"
+  vars:
+    file_crontab: /etc/crontab
+  block:
+    - name: "5.1.2 Verify permissions on /etc/crontab are configured"
+      stat:
+        path: "{{ file_crontab }}"
+      register: stat_result
+    - fail:
+        msg: "5.1.2 failed to verify uid. expected: 0. found: {{ stat_result.stat.uid }}"
+      when:
+        - stat_result.stat.exists == True
+        - stat_result.stat.uid != 0
+    - fail:
+        msg: "5.1.2 failed to verify gid. expected: 0. found: {{ stat_result.stat.gid }}"
+      when:
+        - stat_result.stat.exists == True
+        - stat_result.stat.gid != 0
+    - fail:
+        msg: "5.2.1 failed to verify permissions. expected: 0600. found: {{ stat_result.stat.mode }}"
+      when:
+        - stat_result.stat.exists == True
+        - stat_result.stat.mode != "0600"
+  tags:
+      - cis
+      - cis.5
+      - cis.5.1
+      - cis.5.1.2
+      - scored

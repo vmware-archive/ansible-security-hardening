@@ -1,0 +1,8 @@
+---
+- include_tasks: "{{ include_task_rule }}"
+  loop:
+    - 5.5.yml
+  tags:
+    - cis
+    - cis.5
+    - notscored
