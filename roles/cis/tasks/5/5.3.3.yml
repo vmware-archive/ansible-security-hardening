@@ -1,0 +1,19 @@
+---
+- name: "5.3.3 Ensure password reuse is limited (Scored)"
+  vars:
+    file: /etc/pam.d/system-auth
+  lineinfile:
+    path: "{{ file }}"
+    line: "{{ my_result.line }}"
+    insertbefore: "^# End /etc/pam.d/system-auth$"
+  with_items:
+    - { line: "# Set password reuse limit" } 
+    - { line: "password sufficient pam_unix.so remember=5" } 
+  loop_control:
+    loop_var: my_result
+  tags:
+      - cis
+      - cis.5
+      - cis.5.3
+      - cis.5.3.3
+      - scored

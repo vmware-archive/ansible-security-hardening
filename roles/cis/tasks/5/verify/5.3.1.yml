@@ -1,0 +1,31 @@
+---
+- name: "5.3.1 Verify password creation requirements are configured (Scored)"
+  vars:
+    file: /etc/pam.d/system-auth
+  block:
+    - name: "5.3.1 Verify password creation requirements are configured"
+      lineinfile:
+        path: "{{ file }}"
+        line: "{{ my_result.line }}"
+        state: present
+      check_mode: yes
+      with_items:
+        - { line: "# Set Password Creation Requirements" }
+        - { line: "minlen=14" }
+        - { line: "dcredit=-1" }
+        - { line: "ucredit=-1" }
+        - { line: "ocredit=-1" }
+        - { line: "lcredit=-1" }
+      loop_control:
+        loop_var: my_result
+      register: presence
+    - fail:
+        msg: "5.3.1 failed to Verify password creation requirements."
+      when: presence is changed
+  tags:
+    - cis
+    - cis.5
+    - cis.5.3
+    - cis.5.3.1
+    - scored
+

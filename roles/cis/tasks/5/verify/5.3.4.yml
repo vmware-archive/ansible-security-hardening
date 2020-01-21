@@ -1,0 +1,27 @@
+---
+- name: "5.3.4 Verify password hashing algorithm is SHA-512 (Scored)"
+  vars:
+    file: /etc/pam.d/system-auth
+  block:
+    - name: "5.3.4 Verify password hashing algorithm is SHA-512"
+      lineinfile:
+        path: "{{ file }}"
+        line: "{{ my_result.line }}"
+        state: present
+      check_mode: yes
+      with_items:
+        - { line: "# Set password hashing algorithm" }
+        - { line: "password sufficient pam_unix.so sha512" }
+      loop_control:
+        loop_var: my_result
+      register: presence
+    - fail:
+        msg: "5.3.4 failed to Verify password hashing algorithm is SHA-512"
+      when: presence is changed
+  tags:
+    - cis
+    - cis.5
+    - cis.5.3
+    - cis.5.3.4
+    - scored
+

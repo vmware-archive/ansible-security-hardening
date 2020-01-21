@@ -1,0 +1,24 @@
+---
+- name: "5.4.1.1 Verify password expiration is 90 days or less (Scored)"
+  vars:
+    file: /etc/login.defs
+    pass_max_days: 90
+  block:
+    - name: "5.4.1.1 - Verify password expiration is 90 days or less"
+      lineinfile:
+        path: "{{ file }}"
+        line: "PASS_MAX_DAYS {{ pass_max_days }}"
+        state: present
+      check_mode: yes
+      register: presence
+    - fail:
+        msg: "5.4.1.1 - Failed to Verify password expiration is 90 days or less."
+      when: presence is changed
+  tags:
+    - cis
+    - cis.5
+    - cis.5.4
+    - cis.5.4.1
+    - cis.5.4.1.1
+    - scored
+

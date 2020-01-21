@@ -1,0 +1,31 @@
+---
+- name: "5.2.15 Ensure SSH access is limited (Scored)"
+  vars:
+    file: /etc/ssh/sshd_config
+    SSH_AllowUsers: "" # comma-delimited users allow to ssh access
+    SSH_AllowGroups: "" # comma-delimited groups allow to ssh access
+    SSH_DenyUsers: "" # comma-delimited users deny to ssh access
+    SSH_DenyGroups: "" # comma-delimited groups deny to ssh access
+  block:
+    - name: "5.2.15 Allow SSH for Users"
+      lineinfile:
+        path: "{{ file }}"
+        line: "AllowUsers {{ SSH_AllowUsers }}"
+    - name: "5.2.15 Allow SSH for Groups"
+      lineinfile:
+        path: "{{ file }}"
+        line: "AllowGroups {{ SSH_AllowGroups }}"
+    - name: "5.2.15 Deny SSH for Users"
+      lineinfile:
+        path: "{{ file }}"
+        line: "DenyUsers {{ SSH_DenyUsers }}"
+    - name: "5.2.15 Deny SSH for Groups"
+      lineinfile:
+        path: "{{ file }}"
+        line: "DenyGroups {{ SSH_DenyGroups }}"
+  tags:
+      - cis
+      - cis.5
+      - cis.5.2
+      - cis.5.2.15
+      - scored

@@ -1,0 +1,11 @@
+---
+- name: "5.4.3 Ensure default group for the root account is GID 0 (Scored)"
+  block:
+    - name: "5.4.3 Ensure default group for the root account is GID 0"
+      command: usermod -g 0 root
+  tags:
+      - cis
+      - cis.5
+      - cis.5.4
+      - cis.5.4.3
+      - scored

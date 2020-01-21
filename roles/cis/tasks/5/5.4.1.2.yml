@@ -1,0 +1,28 @@
+---
+- name: "5.4.1.2 Ensure minimum days between password changes is 7 or more (Scored)"
+  vars:
+    file: /etc/login.defs
+    pass_min_days: 7
+  block:
+    - name: "5.4.1.2 - Obtain a list of user accounts"
+      shell: "egrep ^[^:]+:[^\\!*] /etc/shadow | cut -d: -f1"
+      register: egrep_5_4_1_2
+      check_mode: no
+      changed_when: False
+    - name: "5.4.1.2 - Ensure minimum days between password changes is 7 or more"
+      lineinfile:
+        path: "{{ file }}"
+        regexp: "^PASS_MIN_DAYS\\s+"
+        line: "PASS_MIN_DAYS {{ pass_min_days }}"
+    - name: "5.4.1.2 - Set minimum number of days between password changes."
+      command: "chage --mindays {{ pass_min_days }} {{ my_result }}"
+      with_items: "{{ egrep_5_4_1_2.stdout_lines }}"
+      loop_control:
+        loop_var: my_result
+  tags:
+      - cis
+      - cis.5
+      - cis.5.4
+      - cis.5.4.1
+      - cis.5.4.1.2
+      - scored

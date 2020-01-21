@@ -1,0 +1,24 @@
+---
+- name: "5.4.1.2 Verify minimum days between password changes is 7 or more (Scored)"
+  vars:
+    file: /etc/login.defs
+    pass_min_days: 7
+  block:
+    - name: "5.4.1.2 Verify minimum days between password changes is 7 or more"
+      lineinfile:
+        path: "{{ file }}"
+        line: "PASS_MIN_DAYS {{ pass_min_days }}"
+        state: present
+      check_mode: yes
+      register: presence
+    - fail:
+        msg: "5.4.1.2 Failed to Verify minimum days between password changes"
+      when: presence is changed
+  tags:
+    - cis
+    - cis.5
+    - cis.5.4
+    - cis.5.4.1
+    - cis.5.4.1.2
+    - scored
+
