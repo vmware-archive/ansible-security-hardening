@@ -1,0 +1,22 @@
+---
+- name: "5.1.2 Ensure permissions on /etc/crontab are configured (Scored)"
+  vars:
+    file_crontab: /etc/crontab
+  block:
+    - name: "5.1.2 Ensure file /etc/crontab present"
+      stat:
+        path: "{{ file_crontab }}"
+      register: stat_result
+    - name: "5.1.2 Ensure permissions on /etc/crontab are configured"
+      file:
+        path: "{{ file_crontab }}"
+        owner: root
+        group: root
+        mode: 0600
+      when: stat_result.stat.exists == True
+  tags:
+      - cis
+      - cis.5
+      - cis.5.1
+      - cis.5.1.2
+      - scored
