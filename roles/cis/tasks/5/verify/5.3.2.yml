@@ -1,0 +1,55 @@
+---
+- name: "5.3.2 Verify lockout for failed password attempts is configured (Scored)"
+  vars:
+    file_system_auth: /etc/pam.d/system-auth
+  block:
+    - name: "5.3.2 Verify \"pam_faillock.so preauth\" added to the system-auth"
+      lineinfile:
+        path: "{{ file_system_auth }}"
+        line: "auth required pam_faillock.so preauth audit silent deny=5 unlock_time=900"
+        state: present
+      check_mode: yes
+      register: presence1
+    - fail:
+        msg: "5.3.2 failed to Verify \"pam_faillock.so preauth\" present in file system-auth"
+      when: presence1 is changed
+
+    - name: "5.3.2 Verify \"pam_unix.so\" added to the system-auth"
+      lineinfile:
+        path: "{{ file_system_auth }}"
+        line: "auth [success=1 default=bad] pam_unix.so"
+        state: present
+      check_mode: yes
+      register: presence2
+    - fail:
+        msg: "5.3.2 failed to Verify \"pam_unix.so\" present in file system-auth"
+      when: presence2 is changed
+
+    - name: "5.3.2 Verify \"pam_faillock.so authfail\" added to the system-auth"
+      lineinfile:
+        path: "{{ file_system_auth }}"
+        line: "auth [default=die] pam_faillock.so authfail audit deny=5 unlock_time=900"
+        state: present
+      check_mode: yes
+      register: presence3
+    - fail:
+        msg: "5.3.2 failed to Verify \"pam_faillock.so authfail\" present in file system-auth"
+      when: presence3 is changed
+
+    - name: "5.3.2 Verify \"pam_faillock.so authsucc\" added to the system-auth"
+      lineinfile:
+        path: "{{ file_system_auth }}"
+        line: "auth sufficient pam_faillock.so authsucc audit deny=5 unlock_time=900"
+        state: present
+      check_mode: yes
+      register: presence4
+    - fail:
+        msg: "5.3.2 failed to Verify \"pam_faillock.so authsucc\" present in file system-auth"
+      when: presence4 is changed
+
+  tags:
+      - cis
+      - cis.5
+      - cis.5.3
+      - cis.5.3.2
+      - scored

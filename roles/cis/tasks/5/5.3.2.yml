@@ -1,0 +1,30 @@
+---
+- name: "5.3.2 Ensure lockout for failed password attempts is configured (Scored)"
+  vars:
+    file_system_auth: /etc/pam.d/system-auth
+  block:
+    - name: "5.3.2 Add \"pam_faillock.so preauth\" to system-auth"
+      lineinfile:
+        path: "{{ file_system_auth }}"
+        line: "auth required pam_faillock.so preauth audit silent deny=5 unlock_time=900" 
+    - name: "5.3.2 Add \"pam_unix.so\" to system-auth"
+      lineinfile:
+        path: "{{ file_system_auth }}"
+        insertafter: "^auth required pam_faillock.so preauth audit silent deny=5 unlock_time=900"
+        line: "auth [success=1 default=bad] pam_unix.so"
+    - name: "5.3.2 Add \"pam_faillock.so authfail\" to system-auth"
+      lineinfile:
+        path: "{{ file_system_auth }}"
+        insertafter: "^auth [success=1 default=bad] pam_unix.so"
+        line: "auth [default=die] pam_faillock.so authfail audit deny=5 unlock_time=900"
+    - name: "5.3.2 Add \"pam_faillock.so authsucc\" to system-auth"
+      lineinfile:
+        path: "{{ file_system_auth }}"
+        insertafter: "^auth [default=die] pam_faillock.so authfail audit deny=5 unlock_time=900"
+        line: "auth sufficient pam_faillock.so authsucc audit deny=5 unlock_time=900"
+  tags:
+      - cis
+      - cis.5
+      - cis.5.3
+      - cis.5.3.2
+      - scored
