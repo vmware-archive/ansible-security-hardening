@@ -1,0 +1,23 @@
+---
+- name: "1.1.5 Verify if noexec option set on /tmp partition (Scored)"
+  block:
+    - name: "1.1.5 Mount /proc"
+      mount:
+        path: /proc
+        src: none
+        fstype: proc
+        state: mounted
+    - name: "1.1.5 verify if noexec option set on /tmp partition"
+      shell: cat /proc/mounts | grep '\s/tmp\s' | grep  noexec
+      args:
+        warn: no
+      register: output_1
+    - fail:
+        msg: "1.1.5 failed to verify if noexec option set on /tmp partition"
+      when: output_1.rc != 0
+  tags:
+    - cis
+    - cis.1
+    - cis.1.1
+    - cis.1.1.5
+    - scored

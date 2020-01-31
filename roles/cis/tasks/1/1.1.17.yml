@@ -1,0 +1,33 @@
+---
+- name: "1.1.17 Ensure noexec option set on /dev/shm partition (Scored)"
+  block:
+  - name: "1.1.17 Ensure noexec option set on /dev/shm partition"
+    become: yes
+    become_user: root
+    ignore_errors: True
+    shell: |
+      curopts=$(grep -i ' /dev/shm ' /etc/fstab | awk '{print $4}')
+      if [ -z "$curopts" ]; then
+        curopts="rw"
+      fi
+      if [[ $curopts != *"noexec"* ]]; then
+        curopts="$curopts,noexec"
+      fi
+      echo $curopts
+      exit 0
+    register: options
+  - name: "1.1.17 Mount /dev/shm"
+    mount:
+      path: /dev/shm
+      src: tmpfs
+      fstype: tmpfs
+      opts: "{{ options.stdout }}"
+      state: mounted
+   
+  tags:
+    - cis
+    - cis.1
+    - cis.1.1
+    - cis.1.1.17
+    - scored
+

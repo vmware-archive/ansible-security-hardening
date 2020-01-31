@@ -1,0 +1,15 @@
+---
+- name: "1.1.23 Verify if USB Storage is disabled (Scored)"
+  block:
+    - name: "1.1.23 verify if USB Storage is disabled"
+      command: modprobe -n -v usb-storage
+      register: output_1
+    - fail:
+        msg: "1.1.23 cramfs filesystem is not disabled"
+      when: output_1.stdout != "install /bin/true "
+  tags:
+    - cis
+    - cis.1
+    - cis.1.1
+    - cis.1.1.23
+    - scored

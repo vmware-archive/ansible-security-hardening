@@ -1,0 +1,22 @@
+---
+- name: "1.1.22 Disable Automounting (Scored)"
+  block:
+    - name: "1.1.22 Check if autofs is installed"
+      command: rpm -q autofs
+      args:
+        warn: no
+      register: rpm_check
+      failed_when: rpm_check.rc >= 2
+    - name: "1.1.22 Disable Automounting"
+      service:
+        name: autofs
+        enabled: no
+      when: rpm_check.rc == 0
+   
+  tags:
+    - cis
+    - cis.1
+    - cis.1.1
+    - cis.1.1.22
+    - scored
+

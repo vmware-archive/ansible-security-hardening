@@ -56,9 +56,12 @@ rpm --root ~/testroot --initdb
 #install cronie for cis rule 5.1
 #install openssh for cis rule 5.2
 #install photon-release for cis rule 1.7.1.6
+#install util-linux for cis rule 1.1.2
+#install findutils for cis rule 1.1.21 
+#install rpm for cis rule 1.1.21
 tdnf --installroot ~/testroot \
 --releasever 3.0 --nogpgcheck \
-install python3 shadow awk procps-ng iptables cronie openssh photon-release -y
+install python3 shadow awk procps-ng iptables cronie openssh photon-release util-linux findutils rpm -y
 ```
 
 3. Run the cis rule 6.1.2

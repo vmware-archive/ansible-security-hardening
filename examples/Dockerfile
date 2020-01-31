@@ -1,7 +1,7 @@
 FROM photon:3.0
 
 RUN tdnf erase toybox -qy --refresh
-RUN tdnf install rpm ansible python-xml -qy --refresh
+RUN tdnf install rpm ansible python-xml util-linux -qy --refresh
 
 #setup chroot as ansible target
 RUN mkdir -p /root/testroot
@@ -22,6 +22,9 @@ awk \
 iptables \
 cronie \
 openssh \
-photon-release -qy
+photon-release \
+util-linux \
+findutils \
+rpm  -qy
 
 ENTRYPOINT ["/bin/bash"]
