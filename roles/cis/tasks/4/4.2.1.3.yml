@@ -1,0 +1,11 @@
+---
+- name: 4.2.1.3 Ensure logging is configured (Not Scored)"
+  debug:
+    msg: "Not Implemented"
+  tags:
+    - cis
+    - cis.4
+    - cis.4.2
+    - cis.4.2.1
+    - cis.4.2.1.3
+    - notscored

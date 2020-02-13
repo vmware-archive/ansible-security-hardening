@@ -1,0 +1,14 @@
+---
+- name: "4.1.10 Verify that session initiation information is collected (Scored)"
+  vars:
+    audit_rules: /etc/audit/rules.d/audit.rules
+  shell: |
+      grep -q '^-w /var/run/utmp -p wa -k session$' {{ audit_rules }} && \
+      grep -q '^-w /var/log/wtmp -p wa -k logins$' {{ audit_rules }} && \
+      grep -q '^-w /var/log/btmp -p wa -k logins$' {{ audit_rules }}
+  tags:
+      - cis
+      - cis.4
+      - cis.4.1
+      - cis.4.1.10
+      - scored

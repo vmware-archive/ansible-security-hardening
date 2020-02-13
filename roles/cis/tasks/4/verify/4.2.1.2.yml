@@ -1,0 +1,12 @@
+---
+- name: "4.2.1.2 Verify that rsyslog Service is enabled (Scored)"
+  shell: |
+    systemctl is-enabled rsyslog | grep -q enabled
+
+  tags:
+      - cis
+      - cis.4
+      - cis.4.2
+      - cis.4.2.1
+      - cis.4.2.1.2
+      - scored

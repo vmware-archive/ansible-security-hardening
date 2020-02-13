@@ -1,0 +1,14 @@
+---
+- name: "4.2.1.2 Ensure rsyslog Service is enabled (Scored)"
+  vars:
+    rsyslog_service_name: rsyslog
+  shell: |
+    systemctl enable "{{ rsyslog_service_name }}"
+
+  tags:
+      - cis
+      - cis.4
+      - cis.4.2
+      - cis.4.2.1
+      - cis.4.2.1.2
+      - scored

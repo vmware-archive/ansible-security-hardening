@@ -1,0 +1,12 @@
+---
+- name: "4.1.19 Verify that the audit configuration is immutable (Scored)"
+  vars:
+    audit_rules: /etc/audit/rules.d/audit.rules
+  shell: |
+      grep -q '^-e 2$' "{{ audit_rules }}"
+  tags:
+      - cis
+      - cis.4
+      - cis.4.1
+      - cis.4.1.19
+      - scored

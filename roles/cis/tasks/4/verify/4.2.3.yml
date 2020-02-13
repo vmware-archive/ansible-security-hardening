@@ -1,0 +1,18 @@
+---
+- name: "4.2.3 Verify that permissions on all logfiles are configured (Scored)"
+  shell: |
+    if ! ls -ld $(find -P /var/log/ -type f -perm /o=r -o -perm /o=w -o -perm /o=x) | grep -v '^l'; then
+      # No r/w/x permission for others on files, now checking for group permissions
+      if ! ls -ld $(find -P /var/log/ -type f -perm /g=w -o -perm /g=x) | grep -v '^l' | grep -v '^d'; then
+        # No regular file has write and execute permissions for group and no permissions for others - OK
+        exit 0
+      fi
+    fi
+    exit 1
+
+  tags:
+      - cis
+      - cis.4
+      - cis.4.2
+      - cis.4.2.3
+      - scored

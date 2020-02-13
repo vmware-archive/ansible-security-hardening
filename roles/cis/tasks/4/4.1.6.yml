@@ -1,0 +1,19 @@
+---
+- name: "4.1.6 Ensure events that modify user/group information are collected (Scored)"
+  blockinfile:
+    path: /etc/audit/rules.d/audit.rules
+    create: no
+    insertafter: EOF
+    marker: "# {mark} of CIS-4.1.6"
+    block: |
+      -w /etc/group -p wa -k identity
+      -w /etc/passwd -p wa -k identity
+      -w /etc/gshadow -p wa -k identity
+      -w /etc/shadow -p wa -k identity
+      -w /etc/security/opasswd -p wa -k identity
+  tags:
+      - cis
+      - cis.4
+      - cis.4.1
+      - cis.4.1.6
+      - scored

@@ -1,0 +1,17 @@
+---
+- name: "4.1.1.1 Ensure audit log storage size is configured (Not Scored)"
+  vars:
+    audit_conf: /etc/audit/auditd.conf
+  lineinfile:
+    path: "{{ audit_conf }}"
+    regexp: "^[#\\s]*max_log_file\\s+="
+    line: "max_log_file = 8"
+    create: yes
+    state: present
+  tags:
+      - cis
+      - cis.4
+      - cis.4.1
+      - cis.4.1.1
+      - cis.4.1.1.1
+      - notscored

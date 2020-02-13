@@ -1,0 +1,13 @@
+---
+- name: "4.1.8 Verify that events that modify the system's Mandatory Access Controls are collected (Scored)"
+  vars:
+    audit_rules: /etc/audit/rules.d/audit.rules
+  shell: |
+      grep -q '^-w /etc/selinux/ -p wa -k MAC-policy$' {{ audit_rules }} && \
+      grep -q '^-w /usr/share/selinux/ -p wa -k MAC-policy$' {{ audit_rules }}
+  tags:
+      - cis
+      - cis.4
+      - cis.4.1
+      - cis.4.1.8
+      - scored

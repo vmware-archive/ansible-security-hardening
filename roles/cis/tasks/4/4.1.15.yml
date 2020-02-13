@@ -1,0 +1,16 @@
+---
+- name: "4.1.15 Ensure file deletion events by users are collected (Scored)"
+  blockinfile:
+    path: /etc/audit/rules.d/audit.rules
+    create: no
+    insertafter: EOF
+    marker: "# {mark} of CIS-4.1.15"
+    block: |
+      -a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=500 -F auid!=4294967295 -k delete
+      -a always,exit -F arch=b32 -S unlink -S unlinkat -S rename -S renameat -F auid>=500 -F auid!=4294967295 -k delete
+  tags:
+      - cis
+      - cis.4
+      - cis.4.1
+      - cis.4.1.15
+      - scored

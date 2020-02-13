@@ -22,6 +22,9 @@ awk \
 iptables \
 cronie \
 openssh \
+audit \
+rsyslog \
+findutils \
 photon-release -qy
 
 ENTRYPOINT ["/bin/bash"]

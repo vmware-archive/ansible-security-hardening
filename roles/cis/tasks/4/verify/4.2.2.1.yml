@@ -1,0 +1,13 @@
+---
+- name: "4.2.2.1 Verify that journald is configured to send logs to rsyslog (Scored)"
+  vars:
+    journald_conf: /etc/systemd/journald.conf
+  shell: |
+    grep -q '^ForwardToSyslog=yes$' "{{ journald_conf }}"
+  tags:
+      - cis
+      - cis.4
+      - cis.4.2
+      - cis.4.2.2
+      - cis.4.2.2.1
+      - scored

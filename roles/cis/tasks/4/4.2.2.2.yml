@@ -1,0 +1,19 @@
+---
+- name: "4.2.2.2 Ensure journald is configured to compress large log files (Scored)"
+  vars:
+    journald_conf: /etc/systemd/journald.conf
+  block:
+    - name: "4.2.2.2 Ensure journald is configured to compress large log files"
+      lineinfile:
+        path: "{{ journald_conf }}"
+        regexp: '^[#\\s]*Compress\\s*=.*$'
+        line: "Compress=yes"
+        state: present
+
+  tags:
+      - cis
+      - cis.4
+      - cis.4.2
+      - cis.4.2.2
+      - cis.4.2.2.2
+      - scored

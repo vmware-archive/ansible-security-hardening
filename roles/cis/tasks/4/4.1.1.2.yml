@@ -1,0 +1,34 @@
+---
+- name: "4.1.1.2 Ensure system is disabled when audit logs are full (Scored)"
+  vars:
+    file_authd_config: /etc/audit/auditd.conf
+  block:
+    - name: "4.1.1.2 Set 'space_left_action = email' in {{ file_authd_config }}"
+      lineinfile:
+        path: "{{ file_authd_config }}"
+        regexp: "^[#\\s]*space_left_action\\s+=.*$"
+        line: "space_left_action = email"
+        state: present
+        create: yes
+
+    - name: "4.1.1.2 Set 'action_mail_acct = root' in {{ file_authd_config }}"
+      lineinfile:
+        path: "{{ file_authd_config }}"
+        regexp: "^[#\\s]*action_mail_acct\\s+=.*$"
+        line: "action_mail_acct = root"
+        state: present
+
+    - name: "4.1.1.2 Set 'admin_space_left_action = halt' in {{ file_authd_config }}"
+      lineinfile:
+        path: "{{ file_authd_config }}"
+        regexp: "^[#\\s]*admin_space_left_action\\s+=.*$"
+        line: "admin_space_left_action = halt"
+        state: present
+
+  tags:
+      - cis
+      - cis.4
+      - cis.4.1
+      - cis.4.1.1
+      - cis.4.1.1.2
+      - scored
