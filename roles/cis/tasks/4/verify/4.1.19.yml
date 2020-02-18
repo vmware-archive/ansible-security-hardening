@@ -1,0 +1,22 @@
+---
+- name: "4.1.19 Verify that the audit configuration is immutable (Scored)"
+  vars:
+    audit_rules: /etc/audit/rules.d/audit.rules
+  block:
+    - name: "4.1.19 Verify that the audit configuration is immutable (Scored)"
+      lineinfile:
+        path: "{{ audit_rules }}"
+        regexp: "^-e 2$"
+        line: "-e 2"
+        state: present
+      register: result
+    - fail:
+        msg: "failed to find '-e 2' in {{ audit_rules }}"
+      when: (result is changed) or (result is failed)
+
+  tags:
+      - cis
+      - cis.4
+      - cis.4.1
+      - cis.4.1.19
+      - scored

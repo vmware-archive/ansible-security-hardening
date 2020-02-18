@@ -1,0 +1,23 @@
+---
+- name: "4.1.1.3 Ensure audit logs are not automatically deleted (Scored)"
+  vars:
+    audit_config: /etc/audit/auditd.conf
+  block:
+    - name: "4.1.1.3 Verify that audit logs are not automatically deleted (Scored)"
+      lineinfile:
+        path: "{{ audit_config }}"
+        regexp: "^max_log_file_action = keep_logs$"
+        line: "max_log_file_action = keep_logs"
+        state: present
+      register: result
+    - fail:
+        msg: "failed to find 'max_log_file_action = keep_logs' in {{ audit_config }}"
+      when: (result is changed) or (result is failed)
+  
+  tags:
+      - cis
+      - cis.4
+      - cis.4.1
+      - cis.4.1.1
+      - cis.4.1.1.3
+      - scored

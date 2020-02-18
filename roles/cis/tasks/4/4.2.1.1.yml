@@ -1,0 +1,13 @@
+---
+- name: "4.2.1.1 Ensure auditd is installed (Scored)"
+  file:
+    path: "/usr/sbin/rsyslogd"
+    state: file
+
+  tags:
+      - cis
+      - cis.4
+      - cis.4.2
+      - cis.4.2.1
+      - cis.4.2.1.1
+      - scored

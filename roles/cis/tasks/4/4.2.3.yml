@@ -1,0 +1,11 @@
+---
+- name: "4.2.3 Ensure permissions on all logfiles are configured (Scored)"
+  shell: |
+    find /var/log -type f -exec chmod g-wx,o-rwx "{}" + -o -type d -exec chmod g-w,o-rwx "{}" +
+
+  tags:
+      - cis
+      - cis.4
+      - cis.4.2
+      - cis.4.2.3
+      - scored

@@ -1,0 +1,23 @@
+---
+- name: "4.2.1.4 Verify that rsyslog default file permissions configured (Scored)"
+  vars:
+    rsyslog_conf: /etc/rsyslog.conf
+  block:
+    - name: "4.2.1.4 Verify that rsyslog default file permissions configured (Scored)"
+      lineinfile:
+        path: "{{ rsyslog_conf }}"
+        regexp: "^\\$FileCreateMode 0640$"
+        line: "$FileCreateMode 0640"
+        state: present
+      register: result
+    - fail:
+        msg: "failed to find '$FileCreateMode 0640' in {{ rsyslog_conf }}"
+      when: (result is changed) or (result is failed)
+
+  tags:
+      - cis
+      - cis.4
+      - cis.4.2
+      - cis.4.2.1
+      - cis.4.2.1.4
+      - scored

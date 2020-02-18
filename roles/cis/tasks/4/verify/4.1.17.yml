@@ -1,0 +1,22 @@
+---
+- name: "4.1.17 Verify that system administrator actions (sudolog) are collected (Scored)"
+  vars:
+    audit_rules: /etc/audit/rules.d/audit.rules
+  block:
+    - name: "4.1.17 Verify that system administrator actions (sudolog) are collected (Scored)"
+      lineinfile:
+        path: "{{ audit_rules }}"
+        regexp: "^-w /var/log/sudo.log -p wa -k actions$"
+        line: "-w /var/log/sudo.log -p wa -k actions"
+        state: present
+      register: result
+    - fail:
+        msg: "failed to find '-w /var/log/sudo.log -p wa -k actions' in {{ audit_rules }}"
+      when: (result is changed) or (result is failed)
+
+  tags:
+      - cis
+      - cis.4
+      - cis.4.1
+      - cis.4.1.17
+      - scored

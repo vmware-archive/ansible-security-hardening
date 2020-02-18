@@ -1,0 +1,23 @@
+---
+- name: "4.2.2.1 Verify that journald is configured to send logs to rsyslog (Scored)"
+  vars:
+    journald_conf: /etc/systemd/journald.conf
+  block:
+    - name: "4.2.2.1 Verify that journald is configured to send logs to rsyslog (Scored)"
+      lineinfile:
+        path: "{{ journald_conf }}"
+        regexp: "^ForwardToSyslog=yes$"
+        line: "ForwardToSyslog=yes"
+        state: present
+      register: result
+    - fail:
+        msg: "failed to find 'ForwardToSyslog=yes' in {{ journald_conf }}"
+      when: (result is changed) or (result is failed)
+
+  tags:
+      - cis
+      - cis.4
+      - cis.4.2
+      - cis.4.2.2
+      - cis.4.2.2.1
+      - scored

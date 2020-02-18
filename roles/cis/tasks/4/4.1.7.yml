@@ -1,0 +1,21 @@
+---
+- name: "4.1.7 Ensure events that modify the system's network environment are collected (Scored)"
+  blockinfile:
+    path: /etc/audit/rules.d/audit.rules
+    create: no
+    insertafter: EOF
+    marker: "# {mark} of CIS-4.1.7"
+    block: |
+      -a always,exit -F arch=b64 -S sethostname -S setdomainname -k system-locale
+      -a always,exit -F arch=b32 -S sethostname -S setdomainname -k system-locale
+      -w /etc/issue -p wa -k system-locale
+      -w /etc/issue.net -p wa -k system-locale
+      -w /etc/hosts -p wa -k system-locale
+      -w /etc/sysconfig/network -p wa -k system-locale
+
+  tags:
+      - cis
+      - cis.4
+      - cis.4.1
+      - cis.4.1.7
+      - scored
