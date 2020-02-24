@@ -1,0 +1,18 @@
+---
+- name: "6.2.5 Verify root is the only UID 0 account (Scored)"
+  vars:
+    passwd_file: "/etc/passwd"
+  block:
+    - name: 6.2.5 Verify if root is the only UID 0 account
+      shell: awk -F':' '($3 == 0) { print $1 }' {{ passwd_file }}
+      register: result
+    - fail:
+        msg: 6.2.5 failed to verify root is the only UID 0 account, please verify {{ passwd_file }}
+      when: result.stdout != "root"
+  tags:
+    - cis
+    - cis.6
+    - cis.6.2
+    - cis.6.2.5
+    - scored
+
