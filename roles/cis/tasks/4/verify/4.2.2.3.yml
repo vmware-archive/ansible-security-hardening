@@ -1,0 +1,23 @@
+---
+- name: "4.2.2.3 Verify that journald is configured to write logfiles to persistent disk (Scored)"
+  vars:
+    journald_conf: /etc/systemd/journald.conf
+  block:
+    - name: "4.2.2.3 Verify that journald is configured to write logfiles to persistent disk (Scored)"
+      lineinfile:
+        path: "{{ journald_conf }}"
+        regexp: "^Storage=persistent$"
+        line: "Storage=persistent"
+        state: present
+      register: result
+    - fail:
+        msg: "failed to find 'Storage=persistent' in {{ journald_conf }}"
+      when: (result is changed) or (result is failed)
+
+  tags:
+      - cis
+      - cis.4
+      - cis.4.2
+      - cis.4.2.2
+      - cis.4.2.2.3
+      - scored

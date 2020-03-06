@@ -1,0 +1,15 @@
+---
+- name: "4.1.17 Ensure system administrator actions (sudolog) are collected (Scored)"
+  blockinfile:
+    path: /etc/audit/rules.d/audit.rules
+    create: no
+    insertafter: EOF
+    marker: "# {mark} of CIS-4.1.17"
+    block: |
+      -w /var/log/sudo.log -p wa -k actions
+  tags:
+      - cis
+      - cis.4
+      - cis.4.1
+      - cis.4.1.17
+      - scored

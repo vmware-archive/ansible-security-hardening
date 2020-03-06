@@ -1,0 +1,9 @@
+---
+- name: "4.3 Ensure logrotate is configured (Not Scored)"
+  debug:
+    msg: "Not Implemented"
+  tags:
+    - cis
+    - cis.4
+    - cis.4.3
+    - notscored

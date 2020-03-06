@@ -1,0 +1,34 @@
+---
+- include_tasks: "{{ include_task_rule }}"
+  loop:
+    - 4.1.1.2.yml
+    - 4.1.1.3.yml
+    - 4.1.2.yml
+    - 4.1.3.yml
+    - 4.1.5.yml
+    - 4.1.6.yml
+    - 4.1.7.yml
+    - 4.1.8.yml
+    - 4.1.9.yml
+    - 4.1.10.yml
+    - 4.1.11.yml
+    - 4.1.12.yml
+    - 4.1.13.yml
+    - 4.1.14.yml
+    - 4.1.15.yml
+    - 4.1.16.yml
+    - 4.1.17.yml
+    - 4.1.18.yml
+    - 4.1.19.yml
+    - 4.2.1.1.yml
+    - 4.2.1.2.yml
+    - 4.2.1.4.yml
+    - 4.2.1.5.yml
+    - 4.2.2.1.yml
+    - 4.2.2.2.yml
+    - 4.2.2.3.yml
+    - 4.2.3.yml
+  tags:
+    - cis
+    - cis.4
+    - scored

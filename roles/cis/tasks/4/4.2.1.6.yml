@@ -1,0 +1,11 @@
+---
+- name: "4.2.1.6 Ensure remote rsyslog messages are only accepted on designated log hosts. (Not Scored)"
+  debug:
+    msg: "Not Implemented"
+  tags:
+    - cis
+    - cis.4
+    - cis.4.2
+    - cis.4.2.1
+    - cis.4.2.1.6
+    - notscored

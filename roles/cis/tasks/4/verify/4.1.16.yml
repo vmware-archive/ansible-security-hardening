@@ -1,0 +1,13 @@
+---
+- name: "4.1.16 Verify that changes to system administration scope (sudoers) is collected (Scored)"
+  vars:
+    audit_rules: /etc/audit/rules.d/audit.rules
+  shell: |
+      grep -q '^-w /etc/sudoers -p wa -k scope$' {{ audit_rules }} && \
+      grep -q '^-w /etc/sudoers.d/ -p wa -k scope$' {{ audit_rules }}
+  tags:
+      - cis
+      - cis.4
+      - cis.4.1
+      - cis.4.1.16
+      - scored

@@ -1,0 +1,16 @@
+---
+- name: "4.2.1.4 Ensure rsyslog default file permissions configured (Scored)"
+  lineinfile:
+    path: /etc/rsyslog.conf
+    create: yes
+    insertafter: EOF
+    regexp: "^\\$FileCreateMode.*$"
+    line: "$FileCreateMode 0640"
+    state: present
+  tags:
+      - cis
+      - cis.4
+      - cis.4.2
+      - cis.4.2.1
+      - cis.4.2.1.4
+      - scored

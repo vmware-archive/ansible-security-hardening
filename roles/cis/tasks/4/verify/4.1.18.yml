@@ -1,0 +1,15 @@
+---
+- name: "4.1.18 Verify that kernel module loading and unloading is collected (Scored)"
+  vars:
+    audit_rules: /etc/audit/rules.d/audit.rules
+  shell: |
+      grep -q '^-w /sbin/insmod -p x -k modules$' "{{ audit_rules }}" && \
+      grep -q '^-w /sbin/rmmod -p x -k modules$' "{{ audit_rules }}" && \
+      grep -q '^-w /sbin/modprobe -p x -k modules$' "{{ audit_rules }}" && \
+      grep -q '^-a always,exit -F arch=b64 -S init_module -S delete_module -k modules$' "{{ audit_rules }}"
+  tags:
+      - cis
+      - cis.4
+      - cis.4.1
+      - cis.4.1.18
+      - scored

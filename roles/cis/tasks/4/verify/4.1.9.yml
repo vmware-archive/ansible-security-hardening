@@ -1,0 +1,14 @@
+---
+- name: "4.1.9 Verify that login and logout events are collected (Scored)"
+  vars:
+    audit_rules: /etc/audit/rules.d/audit.rules
+  shell: |
+      grep -q '^-w /var/log/faillog -p wa -k logins$' {{ audit_rules }} && \
+      grep -q '^-w /var/log/lastlog -p wa -k logins$' {{ audit_rules }} && \
+      grep -q '^-w /var/log/tallylog -p wa -k logins$' {{ audit_rules }}
+  tags:
+      - cis
+      - cis.4
+      - cis.4.1
+      - cis.4.1.9
+      - scored
