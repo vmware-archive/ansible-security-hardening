@@ -1,0 +1,39 @@
+---
+- name: "1.1.22 Verify if automounting is disabled (Scored)"
+  block:
+    - name: "1.1.22 Check if autofs is installed"
+      command: rpm -q autofs
+      args:
+        warn: no
+      register: rpm_check
+      failed_when: rpm_check.rc >= 2
+    - name: "1.1.22 Verify if automounting is disabled (Scored)"
+      block:
+      - name: "1.1.22 Verify if automounting is disabled (Scored)"
+        shell: systemctl is-enabled autofs | grep -v "enabled"
+        register: output_1
+        ignore_errors: True
+      - fail:
+          msg: "1.1.22 Failed: Automounting is not disabled"
+        when: output_1.rc != 0 
+      when:
+        - rpm_check.rc == 0
+        - ansible_facts['service_mgr'] == "systemd"
+    - name: "1.1.22 Verify if automounting is disabled (Scored)"
+      block:
+      - name: "1.1.22 Verify if automounting is disabled (Scored)"
+        shell: chkconfig --list autofs | grep -v "on"
+        register: output_2
+        ignore_errors: True
+      - fail:
+          msg: "1.1.22 Failed: Automounting is not disabled"
+        when: output_2.rc != 0
+      when:
+        - rpm_check.rc == 0
+        - ansible_facts['service_mgr'] == "sysvinit"
+  tags:
+    - cis
+    - cis.1
+    - cis.1.1
+    - cis.1.1.22
+    - scored

@@ -1,0 +1,50 @@
+---
+- name: "1.1.2 Ensure /tmp is configured (Scored)"
+  vars:
+    tmp_mount: /lib/systemd/system/tmp.mount
+  block:
+    - name: "1.1.2 Ensure /tmp is configured in systemd"
+      block:
+        - name: "1.1.2 register the stat output of tmp.conf"
+          stat:
+            path: "{{ tmp_mount }}"
+          register: output_s
+        - name: "1.1.2 create tmp.mount if it does not exist"
+          copy:
+            src: files/tmp.mount
+            dest: "{{ tmp_mount }}"
+            owner: root
+            group: root
+            mode: '0644'
+          when: output_s.stat.exists == false
+        - name: "1.1.2 Mount tmpfs at /tmp"
+          systemd:
+            name: tmp.mount
+            state: started
+            enabled: yes
+          when: 
+            - output_s.stat.exists == true
+      when:      
+        - ansible_facts['service_mgr'] == "systemd"
+
+    - name: "1.1.2 Ensure /tmp is configured in fstab"
+      block:
+        - name: "1.1.2 Configure and mount /tmp"
+          mount:
+            path: /tmp
+            src: tmpfs
+            fstype: tmpfs
+            opts: defaults,rw,nosuid,noexec,relatime
+            state: mounted
+
+      when:
+        - ansible_facts['service_mgr'] != "systemd"
+
+   
+  tags:
+    - cis
+    - cis.1
+    - cis.1.1
+    - cis.1.1.2
+    - scored
+

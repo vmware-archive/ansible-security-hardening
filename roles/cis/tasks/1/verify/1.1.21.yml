@@ -1,0 +1,17 @@
+---
+- name: "1.1.21 Verify if sticky bit is set on all world-writable directories (Scored)"
+  block:
+    - name: "1.1.21 verify if sticky bit is set on all world-writable directories"
+      shell: df --local -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -type d \( -perm -0002 -a ! -perm -1000 \)
+      args:
+        warn: no
+      register: output_1
+    - fail:
+        msg: "1.1.21 Failed: Sticky bit is not set on all world-writable directories"
+      when: output_1.stdout != ""
+  tags:
+    - cis
+    - cis.1
+    - cis.1.1
+    - cis.1.1.3
+    - scored

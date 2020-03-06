@@ -1,0 +1,60 @@
+---
+- name: "1.1.1 Disable unused filesystems"
+  vars:
+   modprobe_conf: /etc/modprobe.d/modprobe.conf
+  block:
+    - name: "register the stat output of modprobe.d directory"
+      stat:
+        path: /etc/modprobe.d
+      register: output_1
+    - name: "create modprobe.d directory if it does not exist"
+      file:
+        path: /etc/modprobe.d
+        state: directory
+      when: output_1.stat.exists == false
+    - name: "register the stat output of modprobe.conf"
+      stat:
+        path: /etc/modprobe.d/modprobe.conf
+      register: output_2
+    - name: "create modprobe.conf if it does not exist"
+      file: path=/etc/modprobe.d/modprobe.conf state=touch owner=root group=sys mode=0644
+      when: output_2.stat.exists == false
+    - name: "1.1.1.1 Ensure mounting of cramfs filesystems is disabled (Scored)"
+      lineinfile:
+        dest: "{{ modprobe_conf }}"
+        line: "install cramfs /bin/true"
+    - name: "1.1.1.2 Ensure mounting of freevxfs filesystems is disabled (Scored)"
+      lineinfile:
+        dest: "{{ modprobe_conf }}"
+        line: "install freevxfs /bin/true"
+    - name: "1.1.1.3 Ensure mounting of jffs2 filesystems is disabled (Scored)"
+      lineinfile:
+        dest: "{{ modprobe_conf }}"
+        line: "install jffs2 /bin/true"
+    - name: "1.1.1.4 Ensure mounting of hfs filesystems is disabled (Scored)"
+      lineinfile:
+        dest: "{{ modprobe_conf }}"
+        line: "install hfs /bin/true"
+    - name: "1.1.1.5 Ensure mounting of hfsplus filesystems is disabled (Scored)"
+      lineinfile:
+        dest: "{{ modprobe_conf }}"
+        line: "install hfsplus /bin/true"
+    - name: "1.1.1.6 Ensure mounting of squashfs filesystems is disabled (Scored)"
+      lineinfile:
+        dest: "{{ modprobe_conf }}"
+        line: "install squashfs /bin/true"
+    - name: "1.1.1.7 Ensure mounting of udf filesystems is disabled (Scored)"
+      lineinfile:
+        dest: "{{ modprobe_conf }}"
+        line: "install udf /bin/true"
+    - name: "1.1.1.8 Ensure mounting of FAT filesystems is disabled (Not Scored)"
+      lineinfile:
+        dest: "{{ modprobe_conf }}"
+        line: "install vfat /bin/true"
+  tags:
+    - cis
+    - cis.1
+    - cis.1.1
+    - cis.1.1.1
+    - scored
+

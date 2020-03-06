@@ -1,0 +1,23 @@
+---
+- name: "1.1.3 Verify if nodev option set on /tmp partition (Scored)"
+  block:
+    - name: "1.1.3 Mount /proc"
+      mount:
+        path: /proc
+        src: none
+        fstype: proc
+        state: mounted
+    - name: "1.1.3 verify if nodev option set on /tmp partition"
+      shell: cat /proc/mounts | grep '\s/tmp\s' | grep  nodev
+      args:
+        warn: no
+      register: output_1
+    - fail:
+        msg: "1.1.3 failed to verify if nodev option set on /tmp partition"
+      when: output_1.rc != 0
+  tags:
+    - cis
+    - cis.1
+    - cis.1.1
+    - cis.1.1.3
+    - scored

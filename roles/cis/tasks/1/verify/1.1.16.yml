@@ -1,0 +1,23 @@
+---
+- name: "1.1.16 Verify if nosuid option set on /dev/shm partition (Scored)"
+  block:
+    - name: "1.1.16 Mount /proc"
+      mount:
+        path: /proc
+        src: none
+        fstype: proc
+        state: mounted
+    - name: "1.1.16 verify if nosuid option set on /dev/shm partition"
+      shell: cat /proc/mounts | grep '\s/dev/shm\s' | grep  nosuid
+      args:
+        warn: no
+      register: output_1
+    - fail:
+        msg: "1.1.16 failed to verify if nosuid option set on /dev/shm partition"
+      when: output_1.rc != 0
+  tags:
+    - cis
+    - cis.1
+    - cis.1.1
+    - cis.1.1.16
+    - scored

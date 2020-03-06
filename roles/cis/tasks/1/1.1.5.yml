@@ -1,0 +1,66 @@
+---
+- name: "1.1.5 Ensure noexec option set on /tmp partition (Scored)"
+  vars:
+    tmp_mount: /lib/systemd/system/tmp.mount
+  block:
+    - name: "1.1.5 Ensure noexec option set in tmp.mount"
+      block:
+        - name: "1.1.5 register the stat output of tmp.mount"
+          stat:
+            path: "{{ tmp_mount }}"
+          register: output_s
+        - name: "1.1.5 check if option is already set"
+          become: yes
+          become_user: root
+          ignore_errors: True
+          register: presence
+          shell: "grep -i 'Options' {{ tmp_mount }} | grep noexec"
+          when: output_s.stat.exists == true
+        - name: "1.1.5 add option if not present"
+          shell: newoptions=$(grep -i 'Options' {{ tmp_mount }} |  awk '{print $1",noexec"}'); sed -i "/Options/c\\$newoptions" {{ tmp_mount }}
+          when: presence is failed
+        - name: "1.1.5 remount tmpfs at /tmp"
+          systemd:
+            state: restarted
+            daemon_reload: yes
+            force: yes
+            name: tmp.mount
+          when: presence is failed
+      when:      
+        - ansible_facts['service_mgr'] == "systemd"
+
+    - name: "1.1.5 Ensure noexec option set for /tmp in fstab"
+      block:
+        - name: "1.1.5 Ensure noexec option set on /tmp partition"
+          become: yes
+          become_user: root
+          ignore_errors: True
+          shell: |
+            curopts=$(grep -i ' /tmp ' /etc/fstab | awk '{print $4}')
+            if [ -z "$curopts" ]; then
+              curopts="rw,relatime,defaults"
+            fi
+            if [[ $curopts != *"noexec"* ]]; then
+              curopts="$curopts,noexec"
+            fi
+            echo $curopts
+            exit 0
+          register: options
+        - name: "1.1.5 Mount /tmp"
+          mount:
+            path: /tmp
+            src: tmpfs
+            fstype: tmpfs
+            opts: "{{ options.stdout }}"
+            state: mounted
+      when:
+        - ansible_facts['service_mgr'] != "systemd"
+
+   
+  tags:
+    - cis
+    - cis.1
+    - cis.1.1
+    - cis.1.1.5
+    - scored
+
