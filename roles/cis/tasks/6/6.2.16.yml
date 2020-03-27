@@ -1,0 +1,16 @@
+---
+- name: "6.2.16 Ensure no duplicate UIDs exist (Scored)"
+  shell: |
+    tmpfile=''
+    tmpfile="$(mktemp)"
+    awk -F: -v OFS=: '{ $3=$4=($3+a[$3]++) }1' <(sort -t : -k3n /etc/passwd) > "$tmpfile"
+    mv "$tmpfile" /etc/passwd
+  args:
+    executable: /bin/bash
+  tags:
+    - cis
+    - cis.6
+    - cis.6.2
+    - cis.6.2.16
+    - scored
+
