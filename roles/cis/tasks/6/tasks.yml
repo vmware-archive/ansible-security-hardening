@@ -1,6 +1,7 @@
 ---
 - include_tasks: "{{ include_task_rule }}"
   loop:
+    - 6.2.16.yml #Moved it first as there are common file modifications to avoid conflicts
     - 6.1.2.yml
     - 6.1.3.yml
     - 6.1.4.yml

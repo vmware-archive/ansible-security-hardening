@@ -1,0 +1,26 @@
+---
+- name: "6.2.16 Verify no duplicate UIDs exist (Scored)"
+  vars:
+    passwd_file: "/etc/passwd"
+  block:
+    - name: 6.2.16 Verify no duplicate UIDs exist
+      shell: |
+        cat /etc/passwd | cut -f3 -d":" | sort -n | uniq -c | while read x ; do
+          [ -z "${x}" ] && break
+          set - $x
+          if [ $1 -gt 1 ]; then
+            users=`awk -F: '($3 == n) { print $1 }' n=$2 {{ passwd_file }} | xargs`
+            echo "Duplicate UID ($2): ${users}"
+          fi
+        done
+      register: result
+    - fail:
+        msg: 6.2.16 duplicate UIDs exist, please verify {{ passwd_file }}
+      when: result.stdout != ""
+  tags:
+    - cis
+    - cis.6
+    - cis.6.2
+    - cis.6.2.16
+    - scored
+
