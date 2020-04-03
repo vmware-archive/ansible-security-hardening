@@ -1,0 +1,24 @@
+---
+- name: "6.2.11 Verify no users have .forward files (Scored)"
+  vars:
+    passwd_file: "/etc/passwd"
+  block:
+    - name: 6.2.11 Verify no users have .forward files
+      shell: |
+        for dir in `cat {{ passwd_file }} |\
+          awk -F: '{ print $6 }'`; do
+          if [ ! -h "$dir/.forward" -a -f "$dir/.forward" ]; then
+            echo ".forward file $dir/.forward exists"
+          fi
+        done
+      register: result
+    - fail:
+        msg: 6.2.11 users have .forward files, please verify {{ passwd_file }}
+      when: result.stdout != ""
+  tags:
+    - cis
+    - cis.6
+    - cis.6.2
+    - cis.6.2.11
+    - scored
+
