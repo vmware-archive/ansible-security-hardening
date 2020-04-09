@@ -1,0 +1,17 @@
+---
+- name: "6.2.12 Ensure no users have .netrc files (Scored)"
+  shell: |
+    grep -E -v '^(root|halt|sync|shutdown)' /etc/passwd | \
+      awk -F: '($7 != "'"/usr/sbin/nologin"'" && $7 != "/bin/false") { print $1 " " $6 }' | \
+      while read user dir; do
+        [ -d "$dir" -a ! -h "$dir/.netrc" -a -f "$dir/.netrc" ] && rm -f "$dir/.netrc"
+      done
+  register: result
+  failed_when: result.rc != 1
+  tags:
+    - cis
+    - cis.6
+    - cis.6.2
+    - cis.6.2.12
+    - scored
+

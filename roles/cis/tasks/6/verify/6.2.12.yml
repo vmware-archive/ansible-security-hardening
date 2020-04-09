@@ -1,0 +1,24 @@
+---
+- name: "6.2.12 Verify no users have .netrc files (Scored)"
+  vars:
+    passwd_file: "/etc/passwd"
+  block:
+    - name: 6.2.12 Verify no users have .netrc files
+      shell: |
+        for dir in `cat {{ passwd_file }} |\
+          awk -F: '{ print $6 }'`; do
+          if [ ! -h "$dir/.netrc" -a -f "$dir/.netrc" ]; then
+            echo ".netrc file $dir/.netrc exists"
+          fi
+        done
+      register: result
+    - fail:
+        msg: 6.2.12 users have .netrc files, please verify {{ passwd_file }}
+      when: result.stdout != ""
+  tags:
+    - cis
+    - cis.6
+    - cis.6.2
+    - cis.6.2.12
+    - scored
+
