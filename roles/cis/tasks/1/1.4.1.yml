@@ -1,0 +1,16 @@
+---
+- name: "1.4.1 Ensure permissions on bootloader config are configured (Scored)"
+  block:
+   - name: "1.4.1 Ensure permissions on grub.cfg are configured"
+     file:
+      path: /boot/grub/grub.cfg
+      owner: root
+      group: root
+      mode: g-rwx,o-rwx
+  tags:
+    - cis
+    - cis.1
+    - cis.1.4
+    - cis.1.4.1
+    - scored
+

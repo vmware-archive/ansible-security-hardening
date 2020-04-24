@@ -1,0 +1,53 @@
+---
+- name: "1.5.1 Verify if core dumps are restricted (Scored)"
+  vars:
+    coredump_conf: "/etc/systemd/coredump.conf"
+    storage_expected: "Storage=none"
+    process_size_max_expected: "ProcessSizeMax=0"
+  block:
+   - name: "1.5.1 Verify core dump limits"
+     shell: 'grep "hard core" /etc/security/limits.conf'
+     register: output_1
+     failed_when: 0
+   - name: "1.5.1 Verify core dump limits"
+     shell: 'grep "hard core" /etc/security/limits.d/*'
+     register: output_2
+     failed_when: 0
+   - name: "1.5.1 Verify if setuid programs are restricted from dumping core"
+     shell: 'sysctl -n fs.suid_dumpable'
+     register: output_3
+   - name: "1.5.1 Verify if setuid programs are restricted from dumping core"
+     shell: 'grep "fs\.suid_dumpable" /etc/sysctl.conf'
+     register: output_4
+     failed_when: 0
+   - name: "1.5.1 Verify if setuid programs are restricted from dumping core"
+     shell: 'grep "fs\.suid_dumpable" /etc/sysctl.d/*'
+     register: output_5
+     failed_when: 0  
+   - fail:
+        msg: "1.5.1 Failed: core dumps are not restricted"
+     when: ( output_1.rc != 0 and output_2.rc != 0 ) or ( output_3.stdout != "0" and output_4.rc != 0 and output_5.rc != 0 )
+   - name: "1.5.1 Check if coredump.service is installed"
+     shell: systemctl is-enabled coredump.service | grep "abled"
+     register: coredump_service
+     failed_when: 0
+   - name: "1.5.1 verify if coredump.service is configured properly"
+     block:
+       - name: "1.5.1 verify if Storage is set to none in coredump.service"
+         command: grep -Fxq {{ storage_expected }} {{ coredump_conf }}
+         register: output_6
+       - name: "1.5.1 verify if ProcessSizeMax is set to 0 in coredump.service"
+         command: grep -Fxq {{ process_size_max_expected }} {{ coredump_conf }}
+         register: output_7
+       - fail:
+           msg: "1.5.1 failed: coredump.service is not correctly configured"
+         when: output_6.rc != 0 and output_7.rc != 0
+     when: coredump_service.rc == 0 
+
+  tags:
+    - cis
+    - cis.1
+    - cis.1.5
+    - cis.1.5.1
+    - scored
+

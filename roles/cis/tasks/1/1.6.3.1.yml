@@ -1,0 +1,30 @@
+---
+- name: "1.6.3.1 Ensure AppArmor is not disabled in bootloader configuration (Scored)"
+  vars:
+    cmdline: "/proc/cmdline"
+    grub_menulist: "/boot/grub/menu.lst"
+    grub_config: "/boot/grub/grub.cfg"
+    photon_config: "/boot/photon.cfg"
+    systemd_config: "/boot/systemd.cfg"
+    apparmor_unexpected: "apparmor=0"
+  block:
+   - name: "1.6.3.1 Ensure AppArmor is not disabled in bootloader"
+     lineinfile:
+       dest: "{{ bootloader_config }}"
+       state: absent
+       regexp: '{{ apparmor_unexpected }}'
+     with_items: 
+       - "{{ grub_config }}"
+       - "{{ grub_menulist }}"
+       - "{{ photon_config }}"
+       - "{{ systemd_config }}"
+     loop_control:
+       loop_var: bootloader_config
+  tags:
+    - cis
+    - cis.1
+    - cis.1.6
+    - cis.1.6.3
+    - cis.1.6.3.1
+    - scored
+

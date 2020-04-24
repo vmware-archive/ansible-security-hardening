@@ -1,7 +1,7 @@
 FROM photon:3.0
 
 RUN tdnf erase toybox -qy --refresh
-RUN tdnf install rpm ansible python-xml util-linux -qy --refresh
+RUN tdnf install rpm ansible python-xml util-linux libapparmor -qy --refresh
 
 #setup chroot as ansible target
 RUN mkdir -p /root/testroot
@@ -31,6 +31,9 @@ findutils \
 photon-release \
 util-linux \
 findutils \
-rpm  -qy
+rpm \
+grub2 \
+libapparmor \
+sed -qy
 
 ENTRYPOINT ["/bin/bash"]

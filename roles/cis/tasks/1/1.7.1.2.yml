@@ -1,0 +1,13 @@
+---
+- name: "1.7.1.2 Ensure local login warning banner is configured properly (Scored)"
+  block:
+   - name: "1.7.1.2 Ensure local login warning banner is configured properly"
+     shell: echo "Authorized uses only. All activity may be monitored and reported." > /etc/issue
+  tags:
+    - cis
+    - cis.1
+    - cis.1.7
+    - cis.1.7.1
+    - cis.1.7.1.2
+    - scored
+

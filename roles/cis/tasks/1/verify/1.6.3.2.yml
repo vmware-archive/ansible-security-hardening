@@ -1,0 +1,18 @@
+---
+- name: "1.6.3.2 Verify if all AppArmor Profiles are enforcing(Scored)"
+  block:
+   - name: "1.6.3.2 Verify if all AppArmor Profiles are enforcing"
+     shell: (( $(apparmor_status | grep "profiles are loaded" | awk '{print $1}') == $(apparmor_status | grep "profiles are in enforce mode" | awk '{print $1}') ))
+     register: output_1
+   - fail:
+        msg: "1.6.3.2 failed to verify if All AppArmor Profiles are enforcing"
+     when: output_1.rc != 0
+
+  tags:
+    - cis
+    - cis.1
+    - cis.1.6
+    - cis.1.6.3
+    - cis.1.6.3.3
+    - scored
+

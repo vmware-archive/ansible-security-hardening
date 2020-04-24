@@ -1,0 +1,17 @@
+---
+- name: "1.4.3 Verify if authentication is required for single user mode (Scored)"
+  block:
+   - name: "1.4.3 Verify if authentication is required for single user mode"
+     shell: 'grep ^root\:[*\!]\: /etc/shadow'
+     register: output_1
+     failed_when: output_1.rc >= 2
+   - fail:
+        msg: "1.4.3 Failed: authentication is not required for single user mode"
+     when: output_1.rc == 0
+  tags:
+    - cis
+    - cis.1
+    - cis.1.4
+    - cis.1.4.3
+    - scored
+

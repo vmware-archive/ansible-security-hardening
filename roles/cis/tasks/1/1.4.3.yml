@@ -1,0 +1,14 @@
+---
+- name: "1.4.3 Ensure authentication required for single user mode (Scored)"
+  vars:
+    root_password: ca\$hc0w 
+  block:
+   - name: "1.4.3 Ensure authentication required for single user mode"
+     shell: echo -e "{{ root_password }}\n{{ root_password }}" | passwd root
+  tags:
+    - cis
+    - cis.1
+    - cis.1.4
+    - cis.1.4.3
+    - scored
+
