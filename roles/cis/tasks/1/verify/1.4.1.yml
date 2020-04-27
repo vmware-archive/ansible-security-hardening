@@ -1,0 +1,17 @@
+---
+- name: "1.4.1 Verify if permissions on bootloader config are configured (Scored)"
+  block:
+   - name: "1.4.1 Verify permissions on grub.cfg are configured"
+     stat:
+       path: /boot/grub/grub.cfg
+     register: output_1
+   - fail:
+        msg: "1.4.1 Failed: permissions on grub.cfg are not configured"
+     when: output_1.stat.uid != 0 and output_1.stat.gid != 0 and output_1.stat.rgrp != 0 and output_1.stat.wgrp != 0 and output_1.stat.xgrp != 0 and output_1.stat.roth != 0 and output_1.stat.woth != 0 and output_1.stat.xoth != 0
+  tags:
+    - cis
+    - cis.1
+    - cis.1.4
+    - cis.1.4.1
+    - scored
+

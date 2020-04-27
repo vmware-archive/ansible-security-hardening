@@ -1,0 +1,25 @@
+---
+- name: "1.5.3 Verify if address space layout randomization (ASLR) is enabled (Scored)"
+  block:
+   - name: "1.5.3 Verify if kernel.randomize_va_space is set to 2"
+     shell: 'sysctl -n kernel.randomize_va_space'
+     register: output_1
+   - name: "1.5.3 Verify if kernel.randomize_va_space is set to 2"
+     shell: 'grep "kernel\.randomize_va_space" /etc/sysctl.conf'
+     register: output_2
+     failed_when: 0
+   - name: "1.5.3 Verify if kernel.randomize_va_space is set to 2"
+     shell: 'grep "kernel\.randomize_va_space" /etc/sysctl.d/*'
+     register: output_3
+     failed_when: 0  
+   - fail:
+       msg: "1.5.3 Failed: ASLR is not enabled"
+     when: output_1.stdout != "2" and output_2.rc != 0 and output_3.rc != 0
+
+  tags:
+    - cis
+    - cis.1
+    - cis.1.5
+    - cis.1.5.3
+    - scored
+

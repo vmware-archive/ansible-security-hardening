@@ -1,0 +1,38 @@
+---
+- name: "1.6.3.2 Ensure all AppArmor Profiles are enforcing (Scored)"
+  vars:
+    apparmor_dnsmasq: "/etc/apparmor.d/usr.sbin.dnsmasq"
+    apparmor_phpsysinfo: "/etc/apparmor.d/apache2.d/phpsysinfo"
+  block:
+    - name: "1.6.3.2 Edit AppArmor profiles for unsupported pakages in Photon"
+      replace:
+        path: "{{ apparmor_dnsmasq }}"
+        regexp: 'profile libvirt_leaseshelper'
+        replace: 'profile /usr/libexec/libvirt_leaseshelper/'
+    - name: "1.6.3.2 Remove AppArmor profiles for unsupported pakages in Photon"
+      file:
+        path: "{{ apparmor_phpsysinfo }}"
+        state: absent
+    - name: "1.6.3.2 Ensure all AppArmor Profiles are enforcing"
+      shell: "aa-enforce /etc/apparmor.d/*"
+    - name: "1.6.3.2 Enable AppArmor service"
+      systemd:
+        name: apparmor.service
+        state: started
+        enabled: yes
+      when:
+        - ansible_facts['service_mgr'] == "systemd"
+    - name: "1.6.3.2 Enable AppArmor service"
+      shell: "/lib/apparmor/apparmor.systemd start"
+      when:
+       - ansible_facts['service_mgr'] != "systemd"
+  when: ansible_distribution == 'VMware Photon OS'  
+
+  tags:
+    - cis
+    - cis.1
+    - cis.1.6
+    - cis.1.6.3
+    - cis.1.6.3.2
+    - scored
+

@@ -1,0 +1,28 @@
+---
+- name: "1.6.3.1 Verify AppArmor is not disabled in bootloader configuration (Scored)"
+  vars:
+    cmdline: "/proc/cmdline"
+    grub_menulist: "/boot/grub/menu.lst"
+    grub_config: "/boot/grub/grub.cfg"
+    apparmor_unexpected: "apparmor=0"
+  block:
+   - name: "1.6.3.1 Verify that appArmor is not disabled in bootloader configs"
+     shell: 'grep "^\s*linux" {{ grub_menulist }} {{ grub_config }} | grep {{ apparmor_unexpected }}'
+     register: output_1
+     failed_when: 0
+   - name: "1.6.3.1 that AppArmor is not disabled in cmdline"
+     shell: 'grep {{ apparmor_unexpected }} {{ cmdline }}'
+     register: output_2
+     failed_when: 0
+   - fail:
+        msg: "1.6.3.1 Failed: AppArmor is disabled"
+     when: output_1.rc == 0 or output_2.rc == 0
+
+  tags:
+    - cis
+    - cis.1
+    - cis.1.6
+    - cis.1.6.3
+    - cis.1.6.3.1
+    - scored
+

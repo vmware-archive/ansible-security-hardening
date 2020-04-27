@@ -1,0 +1,19 @@
+---
+- name: "1.7.1.2 Verify local login warning banner is configured properly(Scored)"
+  block:
+   - name: "1.7.1.2 Verify local login warning banner is configured properly"
+     shell: grep -i "(\\v|\\r|\\m|\\s|$(grep '^ID=' /etc/os-release | cut -d= -f2 | sed -e 's/\"//g'))" /etc/issue
+     register: output_1
+     failed_when: 0
+   - fail:
+        msg: "1.7.1.2 Failed: Local login warning banner is not configured properly"
+     when: output_1.rc == 0
+
+  tags:
+    - cis
+    - cis.1
+    - cis.1.7
+    - cis.1.7.1
+    - cis.1.7.1.2
+    - scored
+

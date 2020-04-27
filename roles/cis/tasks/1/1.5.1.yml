@@ -1,0 +1,53 @@
+---
+- name: "1.5.1 Ensure core dumps are restricted (Scored)"
+  vars:
+    limits_conf: "/etc/security/limits.conf"
+    coredump_conf: "/etc/systemd/coredump.conf"
+    storage_expected: "Storage=none"
+    process_size_max_expected: "ProcessSizeMax=0"
+  block:
+    - name: "register the stat output of limits.conf"
+      stat:
+        path: "{{ limits_conf }}"
+      register: output_1
+    - name: "create limits.conf if it does not exist"
+      file: path={{ limits_conf }} state=touch owner=root group=sys mode=0644
+      when: output_1.stat.exists == false
+    - name: "1.5.1 Verify core dump limits"
+      lineinfile:
+        dest: "{{ limits_conf }}"
+        line: "* hard core 0"
+    - name: "1.5.1 Ensure setuid programs are restricted from dumping core"
+      sysctl:
+        name: fs.suid_dumpable
+        value: '0'
+        state: present
+        sysctl_set: yes
+        reload: yes
+    - name: "1.5.1 Check if coredump.service is installed"
+      shell: systemctl is-enabled coredump.service | grep "abled"
+      register: coredump_service
+      failed_when: 0
+    - name: "1.5.1 Ensure coredump.service is configured properly"
+      block:
+        - name: "1.5.1 Set Storage to none in coredump.conf"
+          lineinfile:
+            dest: "{{ coredump_conf }}"
+            state: present
+            regexp: '^Storage='
+            line: "Storage=none"
+        - name: "1.5.1 Set ProcessSizeMax to 0 in coredump.conf"
+          lineinfile:
+            dest: "{{ coredump_conf }}"
+            state: present
+            regexp: '^ProcessSizeMax='
+            line: "ProcessSizeMax=0"
+#      when: coredump_service.rc == 0 
+
+  tags:
+    - cis
+    - cis.1
+    - cis.1.5
+    - cis.1.5.1
+    - scored
+

@@ -1,0 +1,23 @@
+---
+- name: "1.7.1.5 Verify permissions on /etc/issue.net are configured (Scored)"
+  block:
+    - name: "1.7.1.5 verify permissions"
+      stat:
+        path: /etc/issue.net
+      register: issue
+    - fail:
+        msg: "1.7.1.5 failed to verify uid. expected: 0. found: {{ issue.stat.uid }}"
+      when: issue.stat.uid != 0
+    - fail:
+        msg: "1.7.1.5 failed to verify gid. expected: 0. found: {{ issue.stat.gid }}"
+      when: issue.stat.gid != 0
+    - fail:
+        msg: "1.7.1.5 failed to verify permissions. expected: 0644. found: {{ issue.stat.mode }}"
+      when: issue.stat.mode != "0644"
+  tags:
+    - cis
+    - cis.1
+    - cis.1.7
+    - cis.1.7.1
+    - cis.1.7.1.5
+    - scored

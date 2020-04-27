@@ -1,0 +1,18 @@
+---
+- name: "1.5.3 Ensure address space layout randomization (ASLR) is enabled (Scored)"
+  block:
+    - name: "1.5.1 Ensure address space layout randomization (ASLR) is enabled"
+      sysctl:
+        name: kernel.randomize_va_space
+        value: '2'
+        state: present
+        sysctl_set: yes
+        reload: yes
+
+  tags:
+    - cis
+    - cis.1
+    - cis.1.5
+    - cis.1.5.3
+    - scored
+

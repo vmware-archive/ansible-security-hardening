@@ -1,5 +1,5 @@
 ---
-- name: "1.7.1.6 Verify permissions on /etc/issue.net are configured (Not Scored)"
+- name: "1.7.1.6 Verify permissions on /etc/issue.net are configured (Scored)"
   block:
     - name: "1.7.1.6 verify permissions"
       stat:
@@ -12,12 +12,12 @@
         msg: "1.7.1.6 failed to verify gid. expected: 0. found: {{ issue.stat.gid }}"
       when: issue.stat.gid != 0
     - fail:
-        msg: "1.7.1.6 failed to verify permissions. expected: 0666. found: {{ issue.stat.mode }}"
-      when: issue.stat.mode != "0666"
+        msg: "1.7.1.6 failed to verify permissions. expected: 0644. found: {{ issue.stat.mode }}"
+      when: issue.stat.mode != "0644"
   tags:
     - cis
     - cis.1
     - cis.1.7
     - cis.1.7.1
     - cis.1.7.1.6
-    - notscored
+    - scored

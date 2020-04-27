@@ -1,0 +1,25 @@
+---
+- name: "1.6.1 Verify if SELinux or AppArmor are installed (Scored)"
+  block:
+   - name: "1.6.1 Check if AppArmor is installed"
+     command: rpm -q libapparmor
+     args:
+       warn: no
+     register: apparmor_rpm_check
+     failed_when: apparmor_rpm_check.rc >= 2
+   - name: "1.6.1 Check if Selinux is installed"
+     command: rpm -q libselinux
+     args:
+       warn: no
+     register: selinux_rpm_check
+     failed_when: selinux_rpm_check.rc >= 2
+   - fail:
+       msg: "1.6.1 Failed: SELinux and AppArmor are not installed"
+     when: apparmor_rpm_check.rc != 0 and selinux_rpm_check.rc != 0
+  tags:
+    - cis
+    - cis.1
+    - cis.1.6
+    - cis.1.6.1
+    - scored
+

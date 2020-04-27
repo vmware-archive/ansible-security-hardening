@@ -1,0 +1,19 @@
+---
+- name: "1.5.4 Ensure prelink is disabled (Scored)"
+  block:
+   - name: "1.5.4 Verify if prelink is installed"
+     command: rpm -q prelink
+     args:
+       warn: no
+     register: rpm_check
+     failed_when: rpm_check.rc >= 2
+   - fail:
+       msg: "1.5.4 Failed: Prelink is not disabled"
+     when: rpm_check.rc == 0
+  tags:
+    - cis
+    - cis.1
+    - cis.1.5
+    - cis.1.5.4
+    - scored
+
