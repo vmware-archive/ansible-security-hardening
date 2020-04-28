@@ -1,0 +1,19 @@
+---
+- name: "2.3.1 Verify that NIS Client is not installed (Scored)"
+  block:
+   - name: "2.3.1 Verify that NIS Client is not installed"
+     command: rpm -q ypbind
+     args:
+       warn: no
+     register: rpm_check
+     failed_when: rpm_check.rc >= 2
+   - fail:
+       msg: "2.3.1 Failed: NIS Client is installed"
+     when: rpm_check.rc == 0
+  tags:
+    - cis
+    - cis.2
+    - cis.2.3
+    - cis.2.3.1
+    - scored
+

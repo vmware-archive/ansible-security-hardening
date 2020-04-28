@@ -1,0 +1,19 @@
+---
+- name: "2.3.2 Verify that rsh Client is not installed (Scored)"
+  block:
+   - name: "2.3.2 Verify that rsh Client is not installed"
+     command: rpm -q rsh
+     args:
+       warn: no
+     register: rpm_check
+     failed_when: rpm_check.rc >= 2
+   - fail:
+       msg: "2.3.2 Failed: rsh Client is installed"
+     when: rpm_check.rc == 0
+  tags:
+    - cis
+    - cis.2
+    - cis.2.3
+    - cis.2.3.2
+    - scored
+

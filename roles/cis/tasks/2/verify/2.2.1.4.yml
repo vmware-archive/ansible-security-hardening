@@ -1,0 +1,21 @@
+---
+- name: "2.2.1.4 Verify that systemd-timesyncd is configured (Scored)"
+  block:
+   - name: "2.2.1.4 Verify that systemd-timesyncd is configured"
+     shell: systemctl is-enabled systemd-timesyncd.service | grep "enabled"
+     register: output_1
+   - name: "2.2.1.4 Verify that NTP service is active"
+     shell: timedatectl status | grep "NTP service.*active"
+     register: output_2
+   - fail:
+       msg: "1.1.2 Failed: systemd-timesyncd is not configured"
+     when: output_1.rc != 0 or output_2.rc != 0
+  when: ansible_facts['service_mgr'] == "systemd"
+  tags:
+    - cis
+    - cis.2
+    - cis.2.2
+    - cis.2.2.1
+    - cis.2.2.1.4
+    - scored
+

@@ -1,0 +1,19 @@
+---
+- name: "2.3.3 Verify that talk Client is not installed (Scored)"
+  block:
+   - name: "2.3.3 Verify that talk Client is not installed"
+     command: rpm -q talk
+     args:
+       warn: no
+     register: rpm_check
+     failed_when: rpm_check.rc >= 2
+   - fail:
+       msg: "2.3.3 Failed: talk Client is installed"
+     when: rpm_check.rc == 0
+  tags:
+    - cis
+    - cis.2
+    - cis.2.3
+    - cis.2.3.3
+    - scored
+

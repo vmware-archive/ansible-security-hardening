@@ -1,0 +1,19 @@
+---
+- name: "2.3.4 Verify that telnet Client is not installed (Scored)"
+  block:
+   - name: "2.3.4 Verify that telnet Client is not installed"
+     command: rpm -q netkit-telnet
+     args:
+       warn: no
+     register: rpm_check
+     failed_when: rpm_check.rc >= 2
+   - fail:
+       msg: "2.3.4 Failed: telnet Client is installed"
+     when: rpm_check.rc == 0
+  tags:
+    - cis
+    - cis.2
+    - cis.2.3
+    - cis.2.3.4
+    - scored
+

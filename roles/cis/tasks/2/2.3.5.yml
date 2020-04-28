@@ -1,0 +1,19 @@
+---
+- name: "2.3.5 Ensure LDAP Client is not installed (Scored)"
+  block:
+  - name: "2.3.5 Check if LDAP Client is installed"
+    command: rpm -q openldap-clients
+    args:
+      warn: no
+    register: rpm_check
+    failed_when: rpm_check.rc >= 2
+  - name: "2.3.5 Uninstall LDAP client"
+    command: rpm -e openldap-clients
+    when: rpm_check.rc == 0  
+  tags:
+    - cis
+    - cis.2
+    - cis.2.3
+    - cis.2.3.5
+    - scored
+

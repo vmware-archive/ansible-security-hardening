@@ -1,5 +1,6 @@
 ---
 - import_tasks: 1/tasks.yml
+- import_tasks: 2/tasks.yml
 - import_tasks: 3/tasks.yml
 - import_tasks: 3/tasksnotscored.yml
 - import_tasks: 4/tasks.yml
