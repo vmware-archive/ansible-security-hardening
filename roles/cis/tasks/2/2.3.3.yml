@@ -1,0 +1,19 @@
+---
+- name: "2.3.3 Ensure talk Client is not installed (Scored)"
+  block:
+  - name: "2.3.3 Check if talk Client is installed"
+    command: rpm -q talk
+    args:
+      warn: no
+    register: rpm_check
+    failed_when: rpm_check.rc >= 2
+  - name: "2.3.3 Uninstall NIS client"
+    command:  rpm -e talk
+    when: rpm_check.rc == 0  
+  tags:
+    - cis
+    - cis.2
+    - cis.2.3
+    - cis.2.3.3
+    - scored
+

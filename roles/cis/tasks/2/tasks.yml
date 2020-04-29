@@ -1,0 +1,13 @@
+---
+- include_tasks: "{{ include_task_rule }}"
+  loop:
+    - 2.2.1.4.yml
+    - 2.3.1.yml
+    - 2.3.2.yml
+    - 2.3.3.yml
+    - 2.3.4.yml
+    - 2.3.5.yml
+  tags:
+    - cis
+    - cis.2
+    - scored

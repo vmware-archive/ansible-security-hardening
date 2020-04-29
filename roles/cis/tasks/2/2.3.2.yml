@@ -1,0 +1,19 @@
+---
+- name: "2.3.2 Ensure rsh Client is not installed (Scored)"
+  block:
+  - name: "2.3.2 Check if rsh Client is installed"
+    command: rpm -q rsh
+    args:
+      warn: no
+    register: rpm_check
+    failed_when: rpm_check.rc >= 2
+  - name: "2.3.2 Uninstall NIS client"
+    command: rpm -e rsh
+    when: rpm_check.rc == 0  
+  tags:
+    - cis
+    - cis.2
+    - cis.2.3
+    - cis.2.3.2
+    - scored
+
