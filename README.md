@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/vmware/ansible-security-hardening.svg?branch=master)](https://travis-ci.org/vmware/ansible-security-hardening)
 
 ## Overview
-Security hardening scripts as recommended by CIS, STIG etc are usually available as shell scripts. This project provides ansible playbooks for these script suites and keep it as distro agnostic as possible.
+Security hardening scripts as recommended by CIS are usually available as shell scripts. This project provides ansible playbooks for these script suites and keep it as distro agnostic as possible.
 
 Remediation is done by regular ansible playbook runs
 
